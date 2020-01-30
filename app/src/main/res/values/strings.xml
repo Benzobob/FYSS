@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">FYSS</string>
+    <string name="fetch_data">Fetch Data</string>
+    <string name="fetch">Fetch</string>
+    <string name="icon">icon</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="log_in">Log In</string>
+    <string name="create_Account">No account yet? Create one</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="name">Name</string>
+    <string name="surname">Surname</string>
+    <string name="logout">Logout</string>
+    <string name="code">Code:</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="reg_warn_1">Please fill remaining text boxes.</string>
+    <string name="title_activity_dashboard_sy">DashboardSyActivity</string>
+    <string name="tab_text_1">Dashboard</string>
+    <string name="tab_text_2">Meetings</string>
+
+
+
+    <string-array name="buildings">
+        <item>Computer Science</item>
+        <item>Foundation</item>
+        <item>Main</item>
+        <item>Schumann</item>
+        <item>Kemmy Business School</item>
+        <item>Tierney</item>
+        <item>Glucksman Library</item>
+        <item>Health Sciences</item>
+        <item>Schrödinger</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="item">Item</string>
+    <string name="profilepic">profilePic</string>
+    <string name="choose_building">Choose Building</string>
+    <string name="meetingimg">meetingImg</string>
+    <string name="week_number">Week Number:</string>
+    <string name="meeting_no">Meeting No:</string>
+    <string name="date">Date:</string>
+    <string name="time">Time:</string>
+    <string name="building">Building:</string>
+    <string name="room">Room:</string>
+</resources>
