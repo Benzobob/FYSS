@@ -3,7 +3,11 @@ package com.fyss.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class GroupMeeting {
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+public class GroupMeeting implements Serializable {
 
     @SerializedName("GMDate")
     @Expose
@@ -20,6 +24,12 @@ public class GroupMeeting {
     @SerializedName("room")
     @Expose
     private String room;
+    @SerializedName("topic")
+    @Expose
+    private String topic;
+    @SerializedName("description")
+    @Expose
+    private String description;
     @SerializedName("weekNum")
     @Expose
     private Integer weekNum;
@@ -62,6 +72,22 @@ public class GroupMeeting {
 
     public void setRoom(String room) {
         this.room = room;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
     }
 
     public Integer getWeekNum() {

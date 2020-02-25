@@ -3,7 +3,10 @@ package com.fyss.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class FyUser {
+import java.io.Serializable;
+import java.util.List;
+
+public class FyUser implements Serializable {
 
     @SerializedName("email")
     @Expose
@@ -23,6 +26,7 @@ public class FyUser {
     @SerializedName("surname")
     @Expose
     private String surname;
+
 
     public String getEmail() {
         return email;

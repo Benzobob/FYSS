@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "716594303956",
+    "firebase_url": "https://fyss-34ccc.firebaseio.com",
+    "project_id": "fyss-34ccc",
+    "storage_bucket": "fyss-34ccc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:716594303956:android:fb58cadd1369a31eee7c41",
+        "android_client_info": {
+          "package_name": "com.fyss"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "716594303956-u8mcbt0bhhi2rbul0pftn166k7sl1o6n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJhxsQzDhieQ-FHFnEysY_wfJI6Pruv4I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "716594303956-u8mcbt0bhhi2rbul0pftn166k7sl1o6n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

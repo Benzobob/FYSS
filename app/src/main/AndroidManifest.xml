@@ -3,7 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.fyss">
 
+
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-feature android:name="android.hardware.nfc" android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -20,8 +24,14 @@
             android:name=".controller.SyAddMeeting"
             android:label="Add Meeting" />
         <activity
-            android:name=".controller.FyLoginActivity"
-            android:label="Login" />
+            android:name=".controller.LoginActivity"
+            android:label="Login">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
         <activity
             android:name=".controller.FyAddUserActivity"
             android:label="Register">
@@ -30,14 +40,52 @@
             android:name=".controller.SyProfileActivity"
             android:label="Profile">
         </activity>
-        <activity android:name=".controller.SyDashboardActivity"
-            android:label="Home">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <activity android:name=".controller.SyDashboardActivity">
+        </activity>
+        <activity android:name=".controller.FyDashboardActivity">
+        </activity>
+        <activity android:name=".controller.SyMeetingPageActivity"
+            android:label="Meeting Page">
 
-                <category android:name="android.intent.category.LAUNCHER" />
+        </activity>
+        <activity android:name=".controller.AddUserActivity" />
+        <activity android:name=".controller.SyAttendanceActivity">
+            <intent-filter>
+
+
+
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".controller.FyAttendanceActivity">
+
+
+        </activity>
+        <activity android:name=".controller.FyProfileActivity">
+
+
+        </activity>
+
+        <service
+            android:name=".service.MyFirebaseMessagingService"
+            android:stopWithTask="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_home_icon_silhouette" />
+        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+
     </application>
 
 </manifest>

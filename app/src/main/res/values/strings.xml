@@ -15,9 +15,9 @@
     <string name="phone_number">Phone Number</string>
     <string name="reg_warn_1">Please fill remaining text boxes.</string>
     <string name="title_activity_dashboard_sy">DashboardSyActivity</string>
-    <string name="tab_text_1">Dashboard</string>
-    <string name="tab_text_2">Meetings</string>
-
+    <string name="tab_text_1">Meetings</string>
+    <string name="tab_text_2">Posts</string>
+    <string name="tab_text_3">Members</string>
 
 
     <string-array name="buildings">
@@ -40,8 +40,31 @@
     <string name="meetingimg">meetingImg</string>
     <string name="week_number">Week Number:</string>
     <string name="meeting_no">Meeting No:</string>
-    <string name="date">Date:</string>
-    <string name="time">Time:</string>
-    <string name="building">Building:</string>
-    <string name="room">Room:</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="building">Building</string>
+    <string name="room">Room</string>
+    <string name="delete_button">delete button</string>
+    <string name="textview">TextView</string>
+    <string name="add_meeting">Add Meeting</string>
+    <string name="instagram">Instagram</string>
+    <string name="home">Home</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="profile">Profile</string>
+    <string name="meeting_1">Meeting 1</string>
+    <string name="topic">Topic</string>
+    <string name="attendance">Attendance</string>
+    <string name="button">Button</string>
+    <string name="send_file">Send File</string>
+    <string name="week">Week</string>
+    <string name="rooma">Room:</string>
+    <string name="buildinga">Building:</string>
+    <string name="description">Description</string>
+    <string name="info">Info</string>
+    <string name="are_you_a_second_year_student_leader">Are you a second year student leader?</string>
+    <string name="already_have_an_account_log_in_here">Already have an account? Log in here.</string>
+    <string name="hold_devices_together_to_sign_in">Hold devices together to sign in.</string>
+    <string name="sign_in">Sign In</string>
+    <string name="submit">Submit</string>
+    <string name="check_boxes_manually_or_via_nfc">Check boxes manually or via NFC.</string>
 </resources>

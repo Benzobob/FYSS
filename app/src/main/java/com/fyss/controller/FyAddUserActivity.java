@@ -67,7 +67,7 @@ public class FyAddUserActivity extends AppCompatActivity {
                             }
                             Toast.makeText(getApplicationContext(), "User Added", Toast.LENGTH_LONG).show();
 
-                            Intent i = new Intent(getApplicationContext(), FyLoginActivity.class);
+                            Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                             startActivity(i);
                             finish();
                         }

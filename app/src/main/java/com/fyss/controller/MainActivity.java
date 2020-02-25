@@ -10,19 +10,12 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.fyss.session.AlertDialogManager;
 import com.fyss.R;
-import com.fyss.session.SessionManager;
 
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
-    // Alert Dialog Manager
-    AlertDialogManager alert = new AlertDialogManager();
-
-    // Session Manager Class
-    SessionManager session;
 
     // Button Logout
     Button btnLogout;
@@ -33,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Session class instance
-        session = new SessionManager(getApplicationContext());
 
         TextView lblName = (TextView) findViewById(R.id.lblName);
         TextView lblEmail = (TextView) findViewById(R.id.lblEmail);
@@ -41,41 +33,6 @@ public class MainActivity extends AppCompatActivity {
         // Button logout
         btnLogout = (Button) findViewById(R.id.btnLogout);
 
-        Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
-
-
-
-        /**
-         * Call this function whenever you want to check user login
-         * This will redirect user to LoginActivity is he is not
-         * logged in
-         * */
-        session.checkLogin();
-
-        // get user data from session
-        HashMap<String, String> user = session.getUserDetails();
-
-        // name
-        String name = user.get(SessionManager.KEY_FIRSTNAME);
-
-        // email
-        String email = user.get(SessionManager.KEY_EMAIL);
-
-        // displaying user data
-        lblName.setText(Html.fromHtml("Name: <b>" + name + "</b>"));
-        lblEmail.setText(Html.fromHtml("Email: <b>" + email + "</b>"));
-
-
-        /**
-         * Logout button click event
-         * */
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View arg0) {
-                session.logoutUser();
-            }
-        });
     }
 
 }
