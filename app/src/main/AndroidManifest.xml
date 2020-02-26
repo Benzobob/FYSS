@@ -26,10 +26,7 @@
         <activity
             android:name=".controller.LoginActivity"
             android:label="Login">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
 
         </activity>
         <activity
@@ -61,7 +58,10 @@
         </activity>
 
         <activity android:name=".controller.FyAttendanceActivity">
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
         <activity android:name=".controller.FyProfileActivity">

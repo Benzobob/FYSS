@@ -1,4 +1,4 @@
-package com.fyss.controller.ui.dashboard.adapter;
+package com.fyss.controller.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -14,31 +14,25 @@ import com.fyss.model.FyUser;
 
 import java.util.ArrayList;
 
-public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.MyViewHolder>{
+public class MembersAttendanceAdapter extends RecyclerView.Adapter<MembersAttendanceAdapter.MyViewHolder>{
 
     private ArrayList<FyUser> membersList;
     private RecyclerViewClickListener mListener;
 
 
-    public MembersAdapter(ArrayList<FyUser> membersList, RecyclerViewClickListener listener) {
+    public MembersAttendanceAdapter(ArrayList<FyUser> membersList, RecyclerViewClickListener listener) {
         this.membersList = membersList;
         this.mListener = listener;
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class MyViewHolder extends RecyclerView.ViewHolder{
         private TextView nameTxt;
         private RecyclerViewClickListener mListener;
 
         public MyViewHolder(View view, RecyclerViewClickListener listener) {
             super(view);
             mListener = listener;
-            view.setOnClickListener(this);
             nameTxt =  view.findViewById(R.id.nameItem);
-        }
-
-        @Override
-        public void onClick(View view) {
-            mListener.onClick(view, getAdapterPosition());
         }
     }
 
@@ -46,7 +40,7 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.MyViewHo
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.members_items, parent, false);
+                .inflate(R.layout.members_attend_items, parent, false);
 
         return new MyViewHolder(itemView, mListener);
     }
@@ -64,9 +58,9 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.MyViewHo
         {
             holder.itemView.setBackgroundColor(Color.parseColor("#c0d6e4"));
         }
-       // else {
-      //      holder.itemView.setBackgroundColor(Color.parseColor("#86959f"));
-      //  }
+        // else {
+        //      holder.itemView.setBackgroundColor(Color.parseColor("#86959f"));
+        //  }
 
     }
 

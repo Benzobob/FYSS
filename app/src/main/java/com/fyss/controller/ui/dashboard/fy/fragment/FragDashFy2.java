@@ -79,8 +79,7 @@ public class FragDashFy2 extends Fragment {
                 GroupMeeting m = meetingsList.get(position);
                 Toast.makeText(FragDashFy2.this.getContext(), "Week num " + m.getWeekNum(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), SyMeetingPageActivity.class);
-                Bundle b = new Bundle();
-                b.putInt("gmid", m.getGmid());
+                intent.putExtra("meeting", m);
                 startActivity(intent);
 
             }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,16 @@ import androidx.fragment.app.Fragment;
 
 import com.fyss.R;
 import com.fyss.controller.LoginActivity;
+import com.fyss.controller.ui.dashboard.sy.fragment.FragDashSy1;
+import com.fyss.network.JsonPlaceHolderApi;
+import com.fyss.network.RetrofitClientInstance;
+import com.fyss.service.MyFirebaseMessagingService;
 import com.fyss.session.SessionManager;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,7 +36,8 @@ import com.fyss.session.SessionManager;
 public class FragDashFy1 extends Fragment {
 
     private SessionManager session;
-    private OnFragmentInteractionListener mListener;
+    private FragDashFy1.OnFragmentInteractionListener mListener;
+    private String fcmToken;
 
     public FragDashFy1() {
     }
@@ -51,6 +62,8 @@ public class FragDashFy1 extends Fragment {
         final View frag1 = inflater.inflate(R.layout.fragment_frag_dash_fy1, container, false);
         Button logout = frag1.findViewById(R.id.button6);
 
+        MyFirebaseMessagingService m = new MyFirebaseMessagingService();
+        fcmToken = m.getToken(getActivity().getApplicationContext());
 
 
         logout.setOnClickListener(new View.OnClickListener() {
@@ -58,6 +71,7 @@ public class FragDashFy1 extends Fragment {
             @Override
             public void onClick(View arg0) {
                 session.logoutUser();
+                removeFcmToken(fcmToken);
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
                 startActivity(intent);
             }
@@ -87,6 +101,26 @@ public class FragDashFy1 extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    private void removeFcmToken(String fcmToken) {
+        Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
+        final JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        Call<Void> call = jsonPlaceHolderApi.removeFcmToken(fcmToken);
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Log.i("TAG", "success");
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.e("TAG", "=======onFailure: " + t.toString());
+                t.printStackTrace();
+
+            }
+        });
     }
 
     /**

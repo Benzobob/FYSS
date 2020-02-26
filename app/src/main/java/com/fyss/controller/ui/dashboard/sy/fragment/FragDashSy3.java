@@ -104,8 +104,6 @@ public class FragDashSy3 extends Fragment {
                         e.printStackTrace();
                     }
                 }
-
-
             }
 
             @Override
@@ -170,16 +168,11 @@ public class FragDashSy3 extends Fragment {
                 String k = "" + membersList.size();
                 Toast.makeText(getActivity().getApplicationContext(), k, Toast.LENGTH_LONG).show();
 
-
-
                 mAdapter = new MembersAdapter(membersList, listener);
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
                 recyclerView.setLayoutManager(mLayoutManager);
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
                 recyclerView.setAdapter(mAdapter);
-
-
-
             }
 
             @Override

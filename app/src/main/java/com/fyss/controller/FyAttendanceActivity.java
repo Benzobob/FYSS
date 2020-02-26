@@ -14,13 +14,16 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.fyss.R;
+import com.fyss.controller.nfc.OutcomingNfcManager;
 import com.fyss.session.SessionManager;
 
-public class FyAttendanceActivity extends AppCompatActivity implements NfcAdapter.CreateNdefMessageCallback{
+public class FyAttendanceActivity extends AppCompatActivity implements OutcomingNfcManager.NfcActivity{
 
     private SessionManager sm;
     private ProgressBar pb;
     private ImageButton backBtn;
+    private NfcAdapter mAdapter;
+    private OutcomingNfcManager outcomingNfccallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +44,7 @@ public class FyAttendanceActivity extends AppCompatActivity implements NfcAdapte
             }
         });
 
-        NfcAdapter mAdapter = NfcAdapter.getDefaultAdapter(this);
+        mAdapter = NfcAdapter.getDefaultAdapter(this);
         if (mAdapter == null) {
             Toast.makeText(this, "This device does not have nfc", Toast.LENGTH_LONG).show();
             return;
@@ -51,10 +54,15 @@ public class FyAttendanceActivity extends AppCompatActivity implements NfcAdapte
             Toast.makeText(this, "Please enable NFC via Settings.", Toast.LENGTH_LONG).show();
         }
 
-        mAdapter.setNdefPushMessageCallback(this, this);
+        // encapsulate sending logic in a separate class
+        this.outcomingNfccallback = new OutcomingNfcManager(this);
+        this.mAdapter.setOnNdefPushCompleteCallback(outcomingNfccallback, this);
+        this.mAdapter.setNdefPushMessageCallback(outcomingNfccallback, this);
+
+       // mAdapter.setNdefPushMessageCallback(this, this);
     }
 
-    @Override
+   /* @Override
     public NdefMessage createNdefMessage(NfcEvent nfcEvent) {
        //Create a string with id number of logged in user and send it
         String id = "1";
@@ -68,5 +76,37 @@ public class FyAttendanceActivity extends AppCompatActivity implements NfcAdapte
         NdefMessage ndefMessage = new NdefMessage(ndefRecord);
         pb.setVisibility(View.GONE);
         return ndefMessage;
+    }*/
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        setIntent(intent);
+    }
+
+    private boolean isNfcSupported() {
+        this.mAdapter = NfcAdapter.getDefaultAdapter(this);
+        return this.mAdapter != null;
+    }
+
+    private void setOutGoingMessage() {
+        String outMessage = "1";
+    }
+
+    @Override
+    public String getOutcomingMessage() {
+        return "123";
+    }
+
+    @Override
+    public void signalResult() {
+        // this will be triggered when NFC message is sent to a device.
+        // should be triggered on UI thread. We specify it explicitly
+        // cause onNdefPushComplete is called from the Binder thread
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(FyAttendanceActivity.this, "123", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
