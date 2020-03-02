@@ -20,7 +20,7 @@ public class OutcomingNfcManager implements NfcAdapter.CreateNdefMessageCallback
         // creating outcoming NFC message with a helper method
         // you could as well create it manually and will surely need, if Android version is too low
         //String outString = activity.getOutcomingMessage();
-        String outString = "123";
+        String outString = "3";
         //byte[] outBytes = outString.getBytes();
        // NdefRecord outRecord = NdefRecord.createMime(MIME_TEXT_PLAIN, outBytes);
         NdefRecord ndefRecord = NdefRecord.createMime("text/plain", outString.getBytes());

@@ -16,25 +16,23 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.fyss.R;
-import com.fyss.model.Group;
 import com.fyss.model.GroupMeeting;
 import com.fyss.network.JsonPlaceHolderApi;
 import com.fyss.network.RetrofitClientInstance;
 import com.fyss.session.SessionManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
+import java.util.Date;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class SyAddMeeting extends AppCompatActivity {
+public class SyEditMeetingActivity extends AppCompatActivity {
+
 
     private EditText room;
     private NumberPicker weekNo;
@@ -53,33 +51,37 @@ public class SyAddMeeting extends AppCompatActivity {
     private final JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_meeting);
         sm = new SessionManager(getApplicationContext());
+        meeting = (GroupMeeting) getIntent().getSerializableExtra("meeting");
 
-        date        = findViewById(R.id.dateTxt);
-        time        = findViewById(R.id.time_picker);
-        room        = findViewById(R.id.roomNo);
-        weekNo      = findViewById(R.id.weekNo);
-        building    = findViewById(R.id.buildingsId);
-        addBtn      = findViewById(R.id.actionBtn);
-        dateText    = findViewById(R.id.dateId);
-        timeText    = findViewById(R.id.timeId);
-        infoText    = findViewById(R.id.infoId);
-        descText    = findViewById(R.id.descId);
-        buildText   = findViewById(R.id.bt);
-        weekText    = findViewById(R.id.wt);
-        roomText    = findViewById(R.id.rt);
+        date = findViewById(R.id.dateTxt);
+        time = findViewById(R.id.time_picker);
+        room = findViewById(R.id.roomNo);
+        weekNo = findViewById(R.id.weekNo);
+        building = findViewById(R.id.buildingsId);
+        addBtn = findViewById(R.id.actionBtn);
+        dateText = findViewById(R.id.dateId);
+        timeText = findViewById(R.id.timeId);
+        infoText = findViewById(R.id.infoId);
+        descText = findViewById(R.id.descId);
+        buildText = findViewById(R.id.bt);
+        weekText = findViewById(R.id.wt);
+        roomText = findViewById(R.id.rt);
 
         weekNo.setMinValue(1);
         weekNo.setMaxValue(12);
+
+        setInformation(meeting);
 
 
         dateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(date.getVisibility() == View.GONE) {
+                if (date.getVisibility() == View.GONE) {
                     date.setVisibility(View.VISIBLE);
                     dateText.setBackgroundColor(getResources().getColor(R.color.colorPurple));
                     hideOthers(1);
@@ -91,7 +93,7 @@ public class SyAddMeeting extends AppCompatActivity {
         timeText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(time.getVisibility() == View.GONE) {
+                if (time.getVisibility() == View.GONE) {
                     time.setVisibility(View.VISIBLE);
                     timeText.setBackgroundColor(getResources().getColor(R.color.colorPurple));
                     hideOthers(2);
@@ -127,14 +129,9 @@ public class SyAddMeeting extends AppCompatActivity {
             }
         });
 
-
-
-
         addBtn.setOnClickListener(new View.OnClickListener() {
-
-            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
-            public void onClick(View arg0) {
+            public void onClick(View v) {
                 year = date.getYear();
                 month = date.getMonth();
                 day = date.getDayOfMonth();
@@ -153,75 +150,17 @@ public class SyAddMeeting extends AppCompatActivity {
                 }
                 strDate = strDate + "T" +strTime;
 
-
-                meeting = new GroupMeeting();
                 meeting.setGMDate(strDate);
                 meeting.setBuilding(building.getSelectedItem().toString());
                 meeting.setRoom(room.getText().toString());
                 meeting.setWeekNum(weekNum);
-                getGroupId();
+                updateMeeting(meeting);
             }
         });
     }
 
-    public void getGroupId() {
-        int id;
-        HashMap<String, String> user = sm.getUserDetails();
-        if (user.get(SessionManager.KEY_USER_ID) != null) {
-            id = Integer.parseInt(user.get(SessionManager.KEY_USER_ID));
-            Call<ResponseBody> call = jsonPlaceHolderApi.getGroupId(id);
-
-            call.enqueue(new Callback<ResponseBody>() {
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    if (!response.isSuccessful()) {
-                        String result = "Cod: " + response.code();
-                        Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
-                    }
-                    else{
-                        String gid = null;
-                        try {
-                            gid = response.body().string();
-                            setGroupForMeeting(Integer.parseInt(gid));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            });
-        }
-    }
-
-    private void setGroupForMeeting(int gid) {
-        Call<Group> call = jsonPlaceHolderApi.findGroupById(gid);
-
-        call.enqueue(new Callback<Group>() {
-            @Override
-            public void onResponse(Call<Group> call, Response<Group> response) {
-                if (!response.isSuccessful()) {
-                    String result = "Code " + response.code();
-                    Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                meeting.setGid(response.body());
-                addMeeting();
-            }
-
-            @Override
-            public void onFailure(Call<Group> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    private void addMeeting() {
-        Call<Void> call = jsonPlaceHolderApi.create(meeting);
+    public void updateMeeting(GroupMeeting meeting){
+        Call<Void> call = jsonPlaceHolderApi.editGroupMeeting(meeting.getGmid(), meeting);
 
         call.enqueue(new Callback<Void>() {
             @Override
@@ -231,7 +170,7 @@ public class SyAddMeeting extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
                     return;
                 }
-                Toast.makeText(getApplicationContext(), "Meeting Added.\nGroup will be notified.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Meeting Information Updated.", Toast.LENGTH_LONG).show();
 
                 Intent i = new Intent(getApplicationContext(), SyDashboardActivity.class);
                 startActivity(i);
@@ -243,6 +182,33 @@ public class SyAddMeeting extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void setInformation(GroupMeeting meeting) {
+        String dateTime [] = meeting.getGMDate().split("T");
+        String dateArray [] = dateTime[0].split("-");
+        String timeArray [] = dateTime[1].split(":");
+        int yyyy = Integer.parseInt(dateArray[0]);
+        int MM = Integer.parseInt(dateArray[1]);
+        int dd = Integer.parseInt(dateArray[2]);
+
+        int HH = Integer.parseInt(timeArray[0]);
+        int mm = Integer.parseInt(timeArray[1]);
+
+        room.setText(meeting.getRoom());
+        date.updateDate(yyyy, MM, dd);
+        time.setHour(HH);
+        time.setMinute(mm);
+        weekNo.setValue(meeting.getWeekNum());
+
+
+        int i = building.getCount();
+        for(int j = 0; j < i; j++){
+            if(meeting.getBuilding().matches(building.getItemAtPosition(j).toString())){
+                building.setSelection(j);
+            }
+        }
     }
 
     public void hideOthers(int i){
@@ -295,5 +261,4 @@ public class SyAddMeeting extends AppCompatActivity {
                 break;
         }
     }
-
 }

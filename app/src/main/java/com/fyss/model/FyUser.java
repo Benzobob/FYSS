@@ -27,6 +27,15 @@ public class FyUser implements Serializable {
     @Expose
     private String surname;
 
+    private boolean isSelected;
+
+    public boolean isSelected(){
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected){
+        this.isSelected = selected;
+    }
 
     public String getEmail() {
         return email;

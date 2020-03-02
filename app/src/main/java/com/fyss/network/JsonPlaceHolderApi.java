@@ -1,4 +1,5 @@
 package com.fyss.network;
+import com.fyss.model.Attendance;
 import com.fyss.model.FCM_Token;
 import com.fyss.model.FyUser;
 import com.fyss.model.Group;
@@ -17,6 +18,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 
@@ -30,6 +32,9 @@ public interface JsonPlaceHolderApi {
 
    @POST("fyss.fcmtokens")
    Call<Void> create(@Body FCM_Token token);
+
+   @POST("fyss.attendance")
+   Call<Void> create(@Body Attendance attendance);
 
    @POST("fyss.groupmeetings")
    Call<Void> create(@Body GroupMeeting meeting);
@@ -68,6 +73,9 @@ public interface JsonPlaceHolderApi {
 
    @GET("fyss.fcmtokens/groups/{syid}")
    Call<List<FCM_Token>> getFcmTokensForGroup(@Path("syid") int syid);
+
+   @PUT("fyss.groupmeetings/{id}")
+   Call<Void> editGroupMeeting(@Path("id") int id, @Body GroupMeeting meeting);
 
 
 }

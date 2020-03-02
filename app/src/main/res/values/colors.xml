@@ -5,6 +5,7 @@
     <color name="colorAccent">#D81B60</color>
     <color name="colorRed">#CF1A1A</color>
     <color name="colorPurple">#9C27B0</color>
+    <color name="colorWhite">#FFFFFF</color>
 
 
     <color name="disable_foreground_grey">#56C5BDBD</color>

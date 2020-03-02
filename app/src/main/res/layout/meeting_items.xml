@@ -6,6 +6,12 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+  <View
+      android:id="@+id/divider5"
+      android:layout_width="match_parent"
+      android:layout_height="1.5dp"
+      android:background="@color/colorPrimaryDark" />
+
   <TextView
       android:id="@+id/meetingNum"
       android:layout_width="match_parent"
@@ -17,6 +23,12 @@
       android:text="@string/meeting_no"
       android:textColor="@android:color/background_light"
       android:textSize="18sp" />
+
+  <View
+      android:id="@+id/divider4"
+      android:layout_width="match_parent"
+      android:layout_height="1.5dp"
+      android:background="@color/colorPrimaryDark" />
 
   <TextView
       android:id="@+id/date"

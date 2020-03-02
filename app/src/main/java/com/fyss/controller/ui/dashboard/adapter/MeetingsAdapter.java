@@ -13,7 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.fyss.R;
 import com.fyss.model.GroupMeeting;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.MyViewHolder>{
 
@@ -62,10 +65,26 @@ public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.MyView
     public void onBindViewHolder(MyViewHolder holder, int position) {
         GroupMeeting meeting = meetingsList.get(position);
 
+        String format1 = "yyyy-MM-dd";
+        String format2 = "dd-MM-yyyy";
+
         String date = meeting.getGMDate();
         String[] parts = date.split("T");
         date = parts[0];
         String time = parts[1];
+
+        time = time.substring(0, time.length() - 3);
+
+        SimpleDateFormat formatter = new SimpleDateFormat(format1);
+        Date d = null;
+        try {
+            d = formatter.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        formatter.applyPattern(format2);
+        date = formatter.format(d);
+
 
         holder.date.setText(date);
         holder.time.setText(time);

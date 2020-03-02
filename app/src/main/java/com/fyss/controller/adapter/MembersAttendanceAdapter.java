@@ -5,7 +5,10 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,13 +31,18 @@ public class MembersAttendanceAdapter extends RecyclerView.Adapter<MembersAttend
     public class MyViewHolder extends RecyclerView.ViewHolder{
         private TextView nameTxt;
         private RecyclerViewClickListener mListener;
+        private CheckBox checkBox;
+
 
         public MyViewHolder(View view, RecyclerViewClickListener listener) {
             super(view);
             mListener = listener;
-            nameTxt =  view.findViewById(R.id.nameItem);
+            nameTxt = view.findViewById(R.id.nameItem);
+            checkBox = view.findViewById(R.id.checkBox2);
         }
     }
+
+
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -47,20 +55,30 @@ public class MembersAttendanceAdapter extends RecyclerView.Adapter<MembersAttend
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        FyUser user = membersList.get(position);
-
+        final FyUser user = membersList.get(position);
+        final int pos = position;
         String name = user.getFirstname() + " " + user.getSurname();
-
-        holder.nameTxt.setText(name);
 
 
         if(position %2 == 1)
         {
             holder.itemView.setBackgroundColor(Color.parseColor("#c0d6e4"));
         }
-        // else {
-        //      holder.itemView.setBackgroundColor(Color.parseColor("#86959f"));
-        //  }
+
+        holder.nameTxt.setText(name);
+
+        holder.checkBox.setOnCheckedChangeListener(null);
+
+        //if true, your checkbox will be selected, else unselected
+        holder.checkBox.setChecked(user.isSelected());
+
+        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                //set your object's last status
+                user.setSelected(isChecked);
+            }
+        });
 
     }
 
@@ -74,4 +92,5 @@ public class MembersAttendanceAdapter extends RecyclerView.Adapter<MembersAttend
 
         void onClick(View view, int position);
     }
+
 }

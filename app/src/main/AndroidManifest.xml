@@ -26,6 +26,10 @@
         <activity
             android:name=".controller.LoginActivity"
             android:label="Login">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
 
 
         </activity>
@@ -51,6 +55,7 @@
 
 
 
+
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data android:mimeType="text/plain" />
@@ -59,12 +64,19 @@
 
         <activity android:name=".controller.FyAttendanceActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+
+
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="text/plain" />
             </intent-filter>
 
         </activity>
         <activity android:name=".controller.FyProfileActivity">
+
+
+        </activity>
+        <activity android:name=".controller.SyEditMeetingActivity">
 
 
         </activity>

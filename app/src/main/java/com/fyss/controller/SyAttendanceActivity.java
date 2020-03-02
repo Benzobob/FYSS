@@ -1,14 +1,17 @@
 package com.fyss.controller;
 
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcEvent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,15 +22,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.fyss.R;
 import com.fyss.controller.adapter.MembersAttendanceAdapter;
 import com.fyss.controller.ui.dashboard.adapter.MembersAdapter;
+import com.fyss.model.Attendance;
 import com.fyss.model.FyUser;
 import com.fyss.model.GroupMeeting;
 import com.fyss.network.JsonPlaceHolderApi;
 import com.fyss.network.RetrofitClientInstance;
 import com.fyss.session.SessionManager;
+import com.google.android.gms.common.util.ArrayUtils;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -51,6 +59,9 @@ public class SyAttendanceActivity extends AppCompatActivity {
     private MembersAttendanceAdapter.RecyclerViewClickListener listener;
     private GroupMeeting meeting;
     private SessionManager sm;
+    private FloatingActionButton submitBtn;
+    private String FyId;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +72,7 @@ public class SyAttendanceActivity extends AppCompatActivity {
         retrofit = RetrofitClientInstance.getRetrofitInstance();
         jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView2);
+        submitBtn = findViewById(R.id.floatingActionButton);
         getGroupId();
 
 
@@ -71,6 +83,14 @@ public class SyAttendanceActivity extends AppCompatActivity {
         if (!nfcAdapter.isEnabled()) {
             Toast.makeText(this, "NFC disabled on this device. Turn on to proceed", Toast.LENGTH_SHORT).show();
         }
+
+        submitBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+                if (membersList.get(0).isSelected()) {
+                    Toast.makeText(SyAttendanceActivity.this, "selected", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     private boolean isNfcSupported() {
@@ -93,8 +113,7 @@ public class SyAttendanceActivity extends AppCompatActivity {
                     String result = "Code: " + response.code();
                     Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
                     return;
-                }
-                else{
+                } else {
                     String gid = null;
                     try {
                         gid = response.body().string();
@@ -131,6 +150,8 @@ public class SyAttendanceActivity extends AppCompatActivity {
                 recyclerView.setLayoutManager(mLayoutManager);
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
                 recyclerView.setAdapter(mAdapter);
+
+                saveMembersList(membersList);
             }
 
             @Override
@@ -140,24 +161,144 @@ public class SyAttendanceActivity extends AppCompatActivity {
         });
     }
 
+    private void saveMembersList(ArrayList<FyUser> membersList) {
+        Gson gson = new Gson();
+        String jsonText = gson.toJson(membersList);
+        String jsonText1 = gson.toJson(meeting);
+        sharedPreferences = getSharedPreferences("Members", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("membersList", jsonText);
+        editor.putString("meeting", jsonText1);
+        editor.apply();
+    }
+
+    private FyUser[] getMembersList() {
+        Gson gson = new Gson();
+        sharedPreferences = getSharedPreferences("Members", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        String jsonText = sharedPreferences.getString("membersList", null);
+        FyUser[] members = gson.fromJson(jsonText, FyUser[].class);
+        return members;
+    }
+
+    private GroupMeeting getMeeting(){
+        Gson gson = new Gson();
+        sharedPreferences = getSharedPreferences("Members", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        String jsonText = sharedPreferences.getString("meeting", null);
+        GroupMeeting m = gson.fromJson(jsonText, GroupMeeting.class);
+        return m;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
+            processIntent(getIntent());
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    void processIntent(Intent intent) {
+        String action = intent.getAction();
+        Parcelable[] ndefMessageArray;
+        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
+            ndefMessageArray = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+            NdefMessage message = (NdefMessage) ndefMessageArray[0];
+            FyId = new String(message.getRecords()[0].getPayload());
+            updateAttendance(FyId);
+            Toast.makeText(this, FyId, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void updateAttendance(String FyId){
+        FyUser[] mems = getMembersList();
+        FyUser user = null;
+        membersList = new ArrayList<FyUser>(Arrays.asList(mems));
+        for (int i = 0; i < membersList.size(); i++) {
+            if (FyId.matches(membersList.get(i).getFyid().toString())) {
+                user = membersList.get(i);
+            }
+        }
+        Attendance a = new Attendance();
+        a.setAttend(1);
+        a.setFyid(user);
+        a.setGmid(getMeeting());
+
+        Call<Void> call = jsonPlaceHolderApi.create(a);
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (!response.isSuccessful()) {
+                    String result = "Cde: " + response.code();
+                    Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+                    return;
+                }
+                Toast.makeText(getApplicationContext(), "Attendance Noted", Toast.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+
+}
+
+    /* public void tickBoxForUser(String FyId){
+        FyUser[] mems = getMembersList();
+        membersList = new ArrayList<FyUser>(Arrays.asList(mems));
+       // Toast.makeText(this, mems[1].getFyid() + " " + FyId, Toast.LENGTH_LONG).show();
+        for (int i = 0; i < membersList.size(); i++) {
+            if (FyId.matches(membersList.get(i).getFyid().toString())) {
+                // if (!mems[i].isSelected()) {
+                //mems[i].setSelected(true);
+                membersList.remove(i);
+            }
+        }
+       // membersList = new ArrayList<FyUser>(Arrays.asList(mems));
+
+        mAdapter = new MembersAttendanceAdapter(membersList, listener);
+
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(mAdapter);
+
+        saveMembersList(membersList);
+
+    }
+
+}
 
 
-   /* @Override
-    protected void onNewIntent(Intent intent) {
-        // also reading NFC message from here in case this activity is already started in order
-        // not to start another instance of this activity
-        sm = new SessionManager(getApplicationContext());
-        receiveMessageFromDevice(getIntent());
-    }*/
+
+
+
+
+
+
+
+
+
+    /*
 
     @Override
     protected void onResume() {
         super.onResume();
-        sm = new SessionManager(getApplicationContext());
         // foreground dispatch should be enabled here, as onResume is the guaranteed place where app
         // is in the foreground
         //enableForegroundDispatch(this, this.nfcAdapter);
         receiveMessageFromDevice(getIntent());
+
     }
 
     @Override
@@ -172,14 +313,25 @@ public class SyAttendanceActivity extends AppCompatActivity {
         if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
             ndefMessageArray = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
                 NdefMessage message = (NdefMessage) ndefMessageArray[0];
-                String msg = new String(message.getRecords()[0].getPayload());
-                Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
-                Toast.makeText(getApplicationContext(), "Here is my text",
-                        Toast.LENGTH_LONG).show();
-            //String inMessage = new String(ndefRecord_0.getPayload());
+                FyId = new String(message.getRecords()[0].getPayload());
+                tickBoxForUser(FyId, membersList);
+                Toast.makeText(this, FyId, Toast.LENGTH_LONG).show();
+            getGroupId();
+
         }
     }
 
+    public void tickBoxForUser(String FyId, ArrayList<FyUser> m){
+       // if(membersList != null) {
+            for (int i = 0; i < m.size(); i++) {
+                if (FyId.matches(m.get(i).getFyid().toString())) {
+                    if (!m.get(i).isSelected()) {
+                        m.get(i).setSelected(true);
+                    }
+                }
+            }
+        //}
+    }
 
     // Foreground dispatch holds the highest priority for capturing NFC intents
     // then go activities with these intent filters:
@@ -227,3 +379,4 @@ public class SyAttendanceActivity extends AppCompatActivity {
 }
 
 
+*/

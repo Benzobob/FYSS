@@ -67,4 +67,6 @@
     <string name="sign_in">Sign In</string>
     <string name="submit">Submit</string>
     <string name="check_boxes_manually_or_via_nfc">Check boxes manually or via NFC.</string>
+    <string name="edit_meeting_information">Edit Meeting Information</string>
+    <string name="edit_info">Edit Info</string>
 </resources>

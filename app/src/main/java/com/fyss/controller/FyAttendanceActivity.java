@@ -17,6 +17,8 @@ import com.fyss.R;
 import com.fyss.controller.nfc.OutcomingNfcManager;
 import com.fyss.session.SessionManager;
 
+import java.util.HashMap;
+
 public class FyAttendanceActivity extends AppCompatActivity implements OutcomingNfcManager.NfcActivity{
 
     private SessionManager sm;
@@ -24,6 +26,7 @@ public class FyAttendanceActivity extends AppCompatActivity implements Outcoming
     private ImageButton backBtn;
     private NfcAdapter mAdapter;
     private OutcomingNfcManager outcomingNfccallback;
+    private String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,10 +69,10 @@ public class FyAttendanceActivity extends AppCompatActivity implements Outcoming
     public NdefMessage createNdefMessage(NfcEvent nfcEvent) {
        //Create a string with id number of logged in user and send it
         String id = "1";
-      //  HashMap<String, String> user = sm.getUserDetails();
-      //  if (user.get(SessionManager.KEY_USER_ID) != null) {
-      //      id = user.get(SessionManager.KEY_USER_ID);
-       // }
+        HashMap<String, String> user = sm.getUserDetails();
+        if (user.get(SessionManager.KEY_USER_ID) != null) {
+            id = user.get(SessionManager.KEY_USER_ID);
+       }
 
         assert id != null;
         NdefRecord ndefRecord = NdefRecord.createMime("text/plain", id.getBytes());
@@ -88,13 +91,13 @@ public class FyAttendanceActivity extends AppCompatActivity implements Outcoming
         return this.mAdapter != null;
     }
 
-    private void setOutGoingMessage() {
-        String outMessage = "1";
-    }
-
     @Override
     public String getOutcomingMessage() {
-        return "123";
+        HashMap<String, String> user = sm.getUserDetails();
+        if (user.get(SessionManager.KEY_USER_ID) != null) {
+            id = user.get(SessionManager.KEY_USER_ID);
+        }
+        return "3";
     }
 
     @Override
@@ -102,10 +105,11 @@ public class FyAttendanceActivity extends AppCompatActivity implements Outcoming
         // this will be triggered when NFC message is sent to a device.
         // should be triggered on UI thread. We specify it explicitly
         // cause onNdefPushComplete is called from the Binder thread
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(FyAttendanceActivity.this, "123", Toast.LENGTH_SHORT).show();
+                Toast.makeText(FyAttendanceActivity.this, id, Toast.LENGTH_SHORT).show();
             }
         });
     }
