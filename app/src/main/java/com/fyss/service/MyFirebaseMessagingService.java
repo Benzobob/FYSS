@@ -11,10 +11,7 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 
 import com.fyss.R;
-import com.fyss.controller.FyDashboardActivity;
 import com.fyss.controller.LoginActivity;
-import com.fyss.controller.MainActivity;
-import com.fyss.controller.SyDashboardActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 

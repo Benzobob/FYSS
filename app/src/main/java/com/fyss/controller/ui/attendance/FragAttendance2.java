@@ -1,59 +1,50 @@
-package com.fyss.controller.ui.dashboard.sy.fragment;
+package com.fyss.controller.ui.attendance;
 
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.fyss.R;
-import com.fyss.controller.LoginActivity;
-import com.fyss.controller.SyDashboardActivity;
+import com.fyss.controller.SyMeetingPageActivity;
+import com.fyss.controller.ui.dashboard.adapter.MeetingsAdapter;
+import com.fyss.model.GroupMeeting;
 import com.fyss.network.JsonPlaceHolderApi;
 import com.fyss.network.RetrofitClientInstance;
-import com.fyss.service.MyFirebaseMessagingService;
 import com.fyss.session.SessionManager;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link FragDashSy1.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link FragDashSy1#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class FragDashSy1 extends Fragment {
+public class FragAttendance2 extends Fragment {
 
-    private SessionManager session;
+    private MeetingsAdapter.RecyclerViewClickListener listener;
+    private SessionManager sm;
+
     private OnFragmentInteractionListener mListener;
-    private String fcmToken;
 
-    public FragDashSy1() {
-        // Required empty public constructor
+    public FragAttendance2() {
     }
 
-
-    // TODO: Rename and change types and number of parameters
-    public static FragDashSy1 newInstance() {
-        FragDashSy1 fragment = new FragDashSy1();
+    public static FragAttendance2 newInstance() {
+        FragAttendance2 fragment = new FragAttendance2();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -62,18 +53,17 @@ public class FragDashSy1 extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        session = new SessionManager(getActivity().getApplicationContext());
+        sm = new SessionManager(getActivity().getApplicationContext());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
 
-        final View frag1 = inflater.inflate(R.layout.fragment_frag_dash_sy1, container, false);
+        final View frag2 = inflater.inflate(R.layout.fragment_frag_dash_fy2, container, false);
+        Button profileBtn = frag2.findViewById(R.id.addMeetingBtn);
 
-        return frag1;
-
+        return frag2;
     }
 
 

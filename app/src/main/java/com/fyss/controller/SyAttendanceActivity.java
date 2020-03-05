@@ -12,6 +12,8 @@ import android.nfc.NfcEvent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -61,6 +63,7 @@ public class SyAttendanceActivity extends AppCompatActivity {
     private SessionManager sm;
     private FloatingActionButton submitBtn;
     private String FyId;
+    private ImageButton backBtn;
     private SharedPreferences sharedPreferences;
 
     @Override
@@ -73,6 +76,7 @@ public class SyAttendanceActivity extends AppCompatActivity {
         jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView2);
         submitBtn = findViewById(R.id.floatingActionButton);
+        backBtn = findViewById(R.id.backBtn);
         getGroupId();
 
 
@@ -89,6 +93,16 @@ public class SyAttendanceActivity extends AppCompatActivity {
                 if (membersList.get(0).isSelected()) {
                     Toast.makeText(SyAttendanceActivity.this, "selected", Toast.LENGTH_LONG).show();
                 }
+            }
+        });
+
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), SyMeetingPageActivity.class);
+                intent.putExtra("meeting", meeting);
+                startActivity(intent);
+                finish();
             }
         });
     }

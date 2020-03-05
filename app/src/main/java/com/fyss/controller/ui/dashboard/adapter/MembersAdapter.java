@@ -62,7 +62,7 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.MyViewHo
 
         if(position %2 == 1)
         {
-            holder.itemView.setBackgroundColor(Color.parseColor("#c0d6e4"));
+            holder.itemView.setBackgroundColor(Color.parseColor("#EDE7F6"));
         }
        // else {
       //      holder.itemView.setBackgroundColor(Color.parseColor("#86959f"));

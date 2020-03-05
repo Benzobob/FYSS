@@ -47,7 +47,7 @@ public interface JsonPlaceHolderApi {
    @POST("fyss.userssy/auth")
    Call<ResponseBody> loginSy(@Field("email") String email, @Field("password") String password, @Field("fcmToken") String token);
 
-   @GET("fyss.userssy/{id}")
+   @GET("fyss.userssy/getSyUser/{id}")
    Call<SyUser> findSyUserById(@Path("id") int id);
 
    @GET("fyss.usersfy/{id}")

@@ -79,6 +79,47 @@
                 android:layout_height="100dp"
                 android:layout_marginTop="25dp"
                 android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/Topic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:text="@string/topic"
+                android:textSize="24sp"
+                android:visibility="gone" />
+
+            <EditText
+                android:id="@+id/topicTxt"
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:visibility="gone"
+                android:importantForAutofill="no"
+                tools:ignore="LabelFor" />
+
+            <TextView
+                android:id="@+id/Description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:gravity="center"
+                android:text="@string/description"
+                android:textSize="24sp"
+                android:visibility="gone" />
+
+            <EditText
+                android:id="@+id/descTxt"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
+                android:visibility="gone"
+                android:importantForAutofill="no"
+                tools:ignore="LabelFor" />
         </LinearLayout>
     </ScrollView>
 
@@ -93,6 +134,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <ImageButton
+        android:id="@+id/backBtn"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_gravity="start"
+        android:background="@color/colorPrimaryDark"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_back"
+        tools:ignore="ContentDescription"
+        tools:layout_editor_absoluteX="366dp"
+        tools:layout_editor_absoluteY="10dp" />
+
         <TextView
             android:id="@+id/titleToolbar"
             android:layout_width="wrap_content"
@@ -101,6 +154,20 @@
             android:text="@string/edit_meeting_information"
             android:textColor="@android:color/background_light"
             android:textSize="16sp" />
+
+        <ImageButton
+            android:id="@+id/delBtn"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_gravity="end"
+            android:background="@color/colorPrimaryDark"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_bin"
+            tools:ignore="ContentDescription"
+            tools:layout_editor_absoluteX="366dp"
+            tools:layout_editor_absoluteY="10dp" />
     </androidx.appcompat.widget.Toolbar>
 
     <DatePicker

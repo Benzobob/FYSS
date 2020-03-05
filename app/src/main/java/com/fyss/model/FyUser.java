@@ -26,8 +26,19 @@ public class FyUser implements Serializable {
     @SerializedName("surname")
     @Expose
     private String surname;
+    @SerializedName("gid")
+    @Expose
+    private Group gid;
 
     private boolean isSelected;
+
+    public Group getGid(){
+        return this.gid;
+    }
+
+    public void setGid(Group gid){
+        this.gid = gid;
+    }
 
     public boolean isSelected(){
         return isSelected;

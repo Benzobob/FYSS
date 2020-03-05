@@ -36,9 +36,9 @@ import retrofit2.Retrofit;
 
 public class SyAddMeeting extends AppCompatActivity {
 
-    private EditText room;
+    private EditText room, desc, topic;
     private NumberPicker weekNo;
-    private TextView dateText, timeText, infoText, descText, buildText, weekText, roomText;
+    private TextView dateText, timeText, infoText, descText, buildText, weekText, roomText, dText, topicText;
     private DatePicker date;
     private TimePicker time;
     private Spinner building;
@@ -71,6 +71,10 @@ public class SyAddMeeting extends AppCompatActivity {
         buildText   = findViewById(R.id.bt);
         weekText    = findViewById(R.id.wt);
         roomText    = findViewById(R.id.rt);
+        desc        = findViewById(R.id.descTxt);
+        topic       = findViewById(R.id.topicTxt);
+        dText       = findViewById(R.id.Description);
+        topicText   = findViewById(R.id.Topic);
 
         weekNo.setMinValue(1);
         weekNo.setMaxValue(12);
@@ -119,7 +123,10 @@ public class SyAddMeeting extends AppCompatActivity {
         descText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                desc.setVisibility(View.VISIBLE);
+                topic.setVisibility(View.VISIBLE);
+                dText.setVisibility(View.VISIBLE);
+                topicText.setVisibility(View.VISIBLE);
                 descText.setBackgroundColor(getResources().getColor(R.color.colorPurple));
                 hideOthers(4);
                 addBtn.show();
@@ -154,7 +161,11 @@ public class SyAddMeeting extends AppCompatActivity {
                 strDate = strDate + "T" +strTime;
 
 
+
+
                 meeting = new GroupMeeting();
+                meeting.setTopic(topic.getText().toString());
+                meeting.setDescription(desc.getText().toString());
                 meeting.setGMDate(strDate);
                 meeting.setBuilding(building.getSelectedItem().toString());
                 meeting.setRoom(room.getText().toString());
@@ -255,6 +266,10 @@ public class SyAddMeeting extends AppCompatActivity {
                 buildText.setVisibility(View.GONE);
                 roomText.setVisibility(View.GONE);
                 weekText.setVisibility(View.GONE);
+                desc.setVisibility(View.GONE);
+                topic.setVisibility(View.GONE);
+                dText.setVisibility(View.GONE);
+                topicText.setVisibility(View.GONE);
                 timeText.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 infoText.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 descText.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
@@ -268,6 +283,10 @@ public class SyAddMeeting extends AppCompatActivity {
                 buildText.setVisibility(View.GONE);
                 roomText.setVisibility(View.GONE);
                 weekText.setVisibility(View.GONE);
+                desc.setVisibility(View.GONE);
+                topic.setVisibility(View.GONE);
+                dText.setVisibility(View.GONE);
+                topicText.setVisibility(View.GONE);
                 dateText.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 infoText.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 descText.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
@@ -276,6 +295,10 @@ public class SyAddMeeting extends AppCompatActivity {
             case 3:
                 date.setVisibility(View.GONE);
                 time.setVisibility(View.GONE);
+                desc.setVisibility(View.GONE);
+                topic.setVisibility(View.GONE);
+                dText.setVisibility(View.GONE);
+                topicText.setVisibility(View.GONE);
                 dateText.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 timeText.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 descText.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
@@ -285,6 +308,7 @@ public class SyAddMeeting extends AppCompatActivity {
                 date.setVisibility(View.GONE);
                 time.setVisibility(View.GONE);
                 building.setVisibility(View.GONE);
+                room.setVisibility(View.GONE);
                 weekNo.setVisibility(View.GONE);
                 buildText.setVisibility(View.GONE);
                 roomText.setVisibility(View.GONE);

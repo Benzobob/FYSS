@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,7 +32,7 @@ public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.MyView
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView weekNo, date, time, building, room;
-        private ImageButton delBtn, editBtn;
+        private LinearLayout when, where;
 
         private RecyclerViewClickListener mListener;
 
@@ -44,6 +45,8 @@ public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.MyView
             time =  view.findViewById(R.id.time);
             building = view.findViewById(R.id.building);
             room =  view.findViewById(R.id.room);
+            when = view.findViewById(R.id.whenLayout);
+            where = view.findViewById(R.id.whereLayout);
         }
 
         @Override
@@ -89,16 +92,15 @@ public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.MyView
         holder.date.setText(date);
         holder.time.setText(time);
         holder.building.setText(meeting.getBuilding());
-        holder.weekNo.setText("Meeting " + meeting.getWeekNum().toString());
+        holder.weekNo.setText("Meeting - Week " + meeting.getWeekNum().toString());
         holder.room.setText(meeting.getRoom());
 
         if(position %2 == 1)
         {
-            holder.itemView.setBackgroundColor(Color.parseColor("#D8BFD8"));
+            holder.where.setBackgroundColor(Color.parseColor("#D1C4E9"));
+            holder.when.setBackgroundColor(Color.parseColor("#EDE7F6"));
         }
-        else {
-            holder.itemView.setBackgroundColor(Color.parseColor("#CCCCFF"));
-        }
+
 
     }
 

@@ -14,6 +14,7 @@ import com.fyss.controller.ui.dashboard.sy.fragment.FragDashSy1;
 import com.fyss.controller.ui.dashboard.sy.fragment.FragDashSy2;
 import com.fyss.controller.ui.dashboard.sy.fragment.FragDashSy3;
 import com.fyss.service.MyFirebaseMessagingService;
+import com.fyss.session.SessionManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
@@ -27,6 +28,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.fyss.controller.ui.dashboard.adapter.SectionsPagerAdapterSy;
 import com.google.firebase.iid.InstanceIdResult;
 
+import java.util.HashMap;
+
 public class SyDashboardActivity extends AppCompatActivity
         implements FragDashSy1.OnFragmentInteractionListener,
         FragDashSy2.OnFragmentInteractionListener,
@@ -34,11 +37,19 @@ public class SyDashboardActivity extends AppCompatActivity
 
 
     private Toolbar toolbar;
+    private SessionManager sm;
+    private String SyId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_sy);
+        sm = new SessionManager(getApplicationContext());
+
+        HashMap<String, String> user = sm.getUserDetails();
+        if (user.get(SessionManager.KEY_USER_ID) != null) {
+            SyId  = user.get(SessionManager.KEY_USER_ID);
+        }
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -51,6 +62,7 @@ public class SyDashboardActivity extends AppCompatActivity
             @Override
             public void onClick(View arg0) {
                 Intent intent = new Intent(SyDashboardActivity.this, SyProfileActivity.class);
+                intent.putExtra("SyId", SyId);
                 startActivity(intent);
             }
         });

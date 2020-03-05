@@ -52,7 +52,6 @@
     <string name="dashboard">Dashboard</string>
     <string name="profile">Profile</string>
     <string name="meeting_1">Meeting 1</string>
-    <string name="topic">Topic</string>
     <string name="attendance">Attendance</string>
     <string name="button">Button</string>
     <string name="send_file">Send File</string>
@@ -69,4 +68,7 @@
     <string name="check_boxes_manually_or_via_nfc">Check boxes manually or via NFC.</string>
     <string name="edit_meeting_information">Edit Meeting Information</string>
     <string name="edit_info">Edit Info</string>
+    <string name="topic">Topic</string>
+    <string name="profile_settings">Profile Settings</string>
+    <string name="title_activity_attendance">AttendanceActivity</string>
 </resources>
