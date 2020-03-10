@@ -1,4 +1,4 @@
-package com.fyss.controller.ui.attendance;
+package com.fyss.controller.ui.attendance.adapter;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

@@ -1,6 +1,7 @@
 package com.fyss.controller.ui.dashboard.fy.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fyss.R;
+import com.fyss.controller.FyProfileActivity;
 import com.fyss.controller.ui.dashboard.adapter.MembersAdapter;
 import com.fyss.model.FyUser;
 import com.fyss.network.JsonPlaceHolderApi;
@@ -80,6 +82,20 @@ public class FragDashFy3 extends Fragment {
         if (user.get(SessionManager.KEY_USER_ID) != null) {
             getGroupId(Integer.parseInt(user.get(SessionManager.KEY_USER_ID)));
         }
+
+        listener = new MembersAdapter.RecyclerViewClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+
+                FyUser m = membersList.get(position);
+                // Toast.makeText(FragDashSy2.this.getContext(), "Week num " + m.getWeekNum(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), FyProfileActivity.class);
+                intent.putExtra("FyId", m.getFyid().toString());
+                startActivity(intent);
+
+            }
+        };
+
         return frag3;
     }
 

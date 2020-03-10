@@ -33,8 +33,8 @@ public interface JsonPlaceHolderApi {
    @POST("fyss.fcmtokens")
    Call<Void> create(@Body FCM_Token token);
 
-   @POST("fyss.attendance")
-   Call<Void> create(@Body Attendance attendance);
+   @PUT("fyss.attendance/edit/{id}")
+   Call<Void> editAttendance(@Path("id") int id, @Body Attendance attendance);
 
    @POST("fyss.groupmeetings")
    Call<Void> create(@Body GroupMeeting meeting);
@@ -50,7 +50,7 @@ public interface JsonPlaceHolderApi {
    @GET("fyss.userssy/getSyUser/{id}")
    Call<SyUser> findSyUserById(@Path("id") int id);
 
-   @GET("fyss.usersfy/{id}")
+   @GET("fyss.usersfy/getFyUser/{id}")
    Call<FyUser> findFyUserById(@Path("id") int id);
 
    @DELETE("fyss.fcmtokens/{id}")
@@ -77,5 +77,12 @@ public interface JsonPlaceHolderApi {
    @PUT("fyss.groupmeetings/{id}")
    Call<Void> editGroupMeeting(@Path("id") int id, @Body GroupMeeting meeting);
 
+   @GET("fyss.attendance/checkDuplicate/{id}/{gmid}")
+   Call<String> checkDuplicate(@Path("id") int id, @Path("gmid") int gmid);
 
+   @GET("fyss.attendance/getAttendance/{id}")
+   Call<Attendance> getAttendance(@Path("id") int id);
+
+   @GET("fyss.usersfy/getRemainingStudents/{gmid}")
+   Call<List<FyUser>> getRemainingStudents(@Path("gmid") int gmid);
 }

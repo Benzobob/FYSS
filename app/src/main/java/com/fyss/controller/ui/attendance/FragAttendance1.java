@@ -2,27 +2,49 @@ package com.fyss.controller.ui.attendance;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.nfc.NdefMessage;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.fyss.R;
 import com.fyss.controller.LoginActivity;
+import com.fyss.controller.adapter.MembersAttendanceAdapter;
+import com.fyss.model.Attendance;
+import com.fyss.model.FyUser;
+import com.fyss.model.GroupMeeting;
 import com.fyss.network.JsonPlaceHolderApi;
 import com.fyss.network.RetrofitClientInstance;
 import com.fyss.service.MyFirebaseMessagingService;
 import com.fyss.session.SessionManager;
+import com.google.gson.Gson;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,9 +56,9 @@ import retrofit2.Retrofit;
  */
 public class FragAttendance1 extends Fragment {
 
-    private SessionManager session;
+    private SessionManager sm;
     private FragAttendance1.OnFragmentInteractionListener mListener;
-    private String fcmToken;
+
 
     public FragAttendance1() {
     }
@@ -52,29 +74,15 @@ public class FragAttendance1 extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        session = new SessionManager(getActivity().getApplicationContext());
+
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        final View frag1 = inflater.inflate(R.layout.fragment_frag_dash_fy1, container, false);
-        Button logout = frag1.findViewById(R.id.button6);
+        final View frag1 = inflater.inflate(R.layout.fragment_attendance_1, container, false);
 
-        MyFirebaseMessagingService m = new MyFirebaseMessagingService();
-        fcmToken = m.getToken(getActivity().getApplicationContext());
-
-
-        logout.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View arg0) {
-                session.logoutUser();
-                removeFcmToken(fcmToken);
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                startActivity(intent);
-            }
-        });
         return frag1;
 
     }
@@ -136,4 +144,8 @@ public class FragAttendance1 extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+
+
+
 }

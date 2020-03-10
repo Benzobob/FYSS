@@ -94,7 +94,7 @@ public class FragDashSy3 extends Fragment {
                 FyUser m = membersList.get(position);
                 // Toast.makeText(FragDashSy2.this.getContext(), "Week num " + m.getWeekNum(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), FyProfileActivity.class);
-                intent.putExtra("user", m);
+                intent.putExtra("FyId", m.getFyid().toString());
                 startActivity(intent);
 
             }

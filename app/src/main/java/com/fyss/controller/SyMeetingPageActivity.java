@@ -2,6 +2,8 @@ package com.fyss.controller;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -20,9 +22,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.fyss.R;
+import com.fyss.controller.ui.attendance.AttendanceActivity;
 import com.fyss.controller.ui.dashboard.sy.fragment.FragDashSy2;
+import com.fyss.model.Attendance;
 import com.fyss.model.GroupMeeting;
 import com.fyss.service.MyFirebaseMessagingService;
+import com.fyss.session.SessionManager;
+import com.google.gson.Gson;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
 
@@ -30,6 +36,7 @@ public class SyMeetingPageActivity extends AppCompatActivity {
 
     private Button attendBtn, editBtn, pvaBtn;
     private ImageButton backBtn;
+    private SharedPreferences sharedPreferences;
     private Toolbar toolbar;
     private TextView meeting_num, topic, desc;
     private WebView pvaWeb;
@@ -40,7 +47,6 @@ public class SyMeetingPageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meeting_page_sy);
         final GroupMeeting meeting = (GroupMeeting) getIntent().getSerializableExtra("meeting");
-
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -65,15 +71,14 @@ public class SyMeetingPageActivity extends AppCompatActivity {
         desc.setText(meeting.getDescription());
         meeting_num.setText("Group Meeting - Week " + meeting.getWeekNum());
 
-
-
         attendBtn = findViewById(R.id.attendBtn);
 
         attendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), SyAttendanceActivity.class);
-                intent.putExtra("meeting", meeting);
+                Intent intent = new Intent(getApplicationContext(), AttendanceActivity.class);
+                //intent.putExtra("meeting", meeting);
+                saveMeeting(meeting);
                 startActivity(intent);
             }
         });
@@ -122,6 +127,23 @@ public class SyMeetingPageActivity extends AppCompatActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    private void saveMeeting(GroupMeeting meeting) {
+        Gson gson = new Gson();
+        String jsonText1 = gson.toJson(meeting);
+        sharedPreferences = getSharedPreferences("Meeting", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("meeting", jsonText1);
+        editor.apply();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        sharedPreferences = getSharedPreferences("Meeting", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove("meeting").commit();
     }
 }
 

@@ -47,9 +47,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 
-public class AttendanceActivity extends AppCompatActivity
-        implements FragAttendance1.OnFragmentInteractionListener,
-        FragAttendance2.OnFragmentInteractionListener, NfcAdapter.CreateNdefMessageCallback,
+public class FyAttendance extends AppCompatActivity
+        implements  NfcAdapter.CreateNdefMessageCallback,
         NfcAdapter.OnNdefPushCompleteCallback {
 
     private NfcAdapter mNfcAdapter;
@@ -60,10 +59,9 @@ public class AttendanceActivity extends AppCompatActivity
     private SharedPreferences sharedPreferences;
     private SessionManager sm;
     private PendingIntent pendingIntent;
-    private boolean flag;
     IntentFilter [] mFilters;
     String[][] mTechLists;
-
+    private String attendanceId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,15 +111,7 @@ public class AttendanceActivity extends AppCompatActivity
                 meeting = getMeeting();
             }
         }
-/*
-
-        if (mNfcAdapter == null) {
-        } else {
-            // Register callback to set NDEF message
-            mNfcAdapter.setNdefPushMessageCallback(this, this);
-            // Register callback to listen for message-sent success
-            mNfcAdapter.setOnNdefPushCompleteCallback(this, this);
-        }*/
+        mNfcAdapter.setNdefPushMessageCallback(this, this);
     }
 
     private GroupMeeting getMeeting() {
@@ -134,10 +124,6 @@ public class AttendanceActivity extends AppCompatActivity
     }
 
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
 
     /**
      * Implementation for the CreateNdefMessageCallback interface
@@ -187,107 +173,4 @@ public class AttendanceActivity extends AppCompatActivity
         }
     };
 
-    @Override
-    public void onPause(){
-        super.onPause();
-        mNfcAdapter.disableForegroundDispatch(this);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mNfcAdapter.enableForegroundDispatch(this, pendingIntent, mFilters, mTechLists);
-    }
-
-    @Override
-    public void onNewIntent(Intent intent) {
-        Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
-        NdefMessage msg = (NdefMessage) rawMsgs[0];
-
-        //This is the message sent from the other device
-        String msg1 = new String(msg.getRecords()[0].getPayload());
-
-        //If its a first year, then update attendance
-        if(!msg1.matches("SY")){
-            checkDuplicate(msg1);
-        }
-    }
-
-    private boolean checkDuplicate(final String id){
-
-        Call<String> call = jsonPlaceHolderApi.checkDuplicate(Integer.parseInt(id), meeting.getGmid());
-
-        call.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                if (!response.isSuccessful()) {
-                    String result = "Code: " + response.code();
-                    Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
-                    return;
-                }
-                if(response.body().matches("Duplicate")){
-                    flag = false;
-                    Toast.makeText(getApplicationContext(), "Attendance has already been noted.", Toast.LENGTH_LONG).show();
-                }else{
-                    flag = true;
-                    String aid = response.body();
-                    getAttendance(aid);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                Toast.makeText(getApplicationContext(),  t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-        return flag;
-    }
-
-    private void getAttendance(final String aid) {
-        Call<Attendance> call = jsonPlaceHolderApi.getAttendance(Integer.parseInt(aid));
-
-
-        call.enqueue(new Callback<Attendance>() {
-            @Override
-            public void onResponse(Call<Attendance> call, Response<Attendance> response) {
-                if (!response.isSuccessful()) {
-                    String result = "Code: " + response.code();
-                    Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                updateAttendance(response.body());
-
-            }
-
-            @Override
-            public void onFailure(Call<Attendance> call, Throwable t) {
-                Toast.makeText(getApplicationContext(),"2" + t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    private void updateAttendance(Attendance a) {
-        a.setAttend(1);
-
-        Call<Void> call = jsonPlaceHolderApi.editAttendance(a.getAid().intValue(), a);
-        // Toast.makeText(getApplicationContext(), aid + a.toString(), Toast.LENGTH_LONG).show();
-        call.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (!response.isSuccessful()) {
-                    String result = "Cde: " + response.code();
-                    Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
-                    return;
-                }
-                Toast.makeText(getApplicationContext(), "Attendance Noted.", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-
-    }
 }

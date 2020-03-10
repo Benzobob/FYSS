@@ -2,6 +2,7 @@ package com.fyss.controller.ui.attendance;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,26 +18,41 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.fyss.R;
 import com.fyss.controller.SyMeetingPageActivity;
+import com.fyss.controller.adapter.MembersAttendanceAdapter;
 import com.fyss.controller.ui.dashboard.adapter.MeetingsAdapter;
+import com.fyss.model.FyUser;
 import com.fyss.model.GroupMeeting;
 import com.fyss.network.JsonPlaceHolderApi;
 import com.fyss.network.RetrofitClientInstance;
 import com.fyss.session.SessionManager;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 public class FragAttendance2 extends Fragment {
 
-    private MeetingsAdapter.RecyclerViewClickListener listener;
     private SessionManager sm;
+    private ArrayList<FyUser> membersList;
+    private RecyclerView recyclerView;
+    private MembersAttendanceAdapter mAdapter;
+    private FloatingActionButton submitBtn;
+    private Retrofit retrofit;
+    private MembersAttendanceAdapter.RecyclerViewClickListener listener;
+    private JsonPlaceHolderApi jsonPlaceHolderApi;
+    private SharedPreferences sharedPreferences;
 
     private OnFragmentInteractionListener mListener;
 
@@ -60,8 +76,13 @@ public class FragAttendance2 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        final View frag2 = inflater.inflate(R.layout.fragment_frag_dash_fy2, container, false);
+        final View frag2 = inflater.inflate(R.layout.fragment_attendance_2, container, false);
         Button profileBtn = frag2.findViewById(R.id.addMeetingBtn);
+        recyclerView = frag2.findViewById(R.id.recyclerView2);
+        submitBtn = frag2.findViewById(R.id.floatingActionButton);
+        retrofit = RetrofitClientInstance.getRetrofitInstance();
+        jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        prepareMembersData();
 
         return frag2;
     }
@@ -104,5 +125,42 @@ public class FragAttendance2 extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private GroupMeeting getMeeting() {
+        Gson gson = new Gson();
+        sharedPreferences = getActivity().getSharedPreferences("Meeting", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        String jsonText = sharedPreferences.getString("meeting", null);
+        GroupMeeting m = gson.fromJson(jsonText, GroupMeeting.class);
+        return m;
+    }
+
+    private void prepareMembersData() {
+        //get user data from session
+        Call<List<FyUser>> call = jsonPlaceHolderApi.getRemainingStudents(gmid);
+
+        call.enqueue(new Callback<List<FyUser>>() {
+            @Override
+            public void onResponse(Call<List<FyUser>> call, Response<List<FyUser>> response) {
+                if (!response.isSuccessful()) {
+                    String result = "Code: " + response.code();
+                    Toast.makeText(getActivity().getApplicationContext(), result, Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                membersList = new ArrayList<>(response.body());
+                mAdapter = new MembersAttendanceAdapter(membersList, listener);
+                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+                recyclerView.setLayoutManager(mLayoutManager);
+                recyclerView.setItemAnimator(new DefaultItemAnimator());
+                recyclerView.setAdapter(mAdapter);
+            }
+
+            @Override
+            public void onFailure(Call<List<FyUser>> call, Throwable t) {
+                Toast.makeText(getActivity().getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

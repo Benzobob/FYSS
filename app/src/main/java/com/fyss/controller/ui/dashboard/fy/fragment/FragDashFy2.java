@@ -19,6 +19,7 @@ import com.fyss.R;
 import com.fyss.controller.SyAddMeeting;
 import com.fyss.controller.SyMeetingPageActivity;
 import com.fyss.controller.ui.dashboard.adapter.MeetingsAdapter;
+import com.fyss.model.FyUser;
 import com.fyss.model.GroupMeeting;
 import com.fyss.network.JsonPlaceHolderApi;
 import com.fyss.network.RetrofitClientInstance;
@@ -86,7 +87,6 @@ public class FragDashFy2 extends Fragment {
         };
 
 
-
         HashMap<String, String> user = sm.getUserDetails();
         if (user.get(SessionManager.KEY_USER_ID) != null) {
             int id = Integer.parseInt(user.get(SessionManager.KEY_USER_ID));
@@ -115,13 +115,11 @@ public class FragDashFy2 extends Fragment {
                 Toast.makeText(getActivity().getApplicationContext(), k, Toast.LENGTH_LONG).show();
 
 
-
                 mAdapter = new MeetingsAdapter(meetingsList, listener);
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
                 recyclerView.setLayoutManager(mLayoutManager);
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
                 recyclerView.setAdapter(mAdapter);
-
 
 
             }
@@ -172,4 +170,5 @@ public class FragDashFy2 extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 }
