@@ -3,9 +3,11 @@ package com.fyss.controller;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -24,8 +26,10 @@ import com.fyss.session.SessionManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 import okhttp3.ResponseBody;
@@ -42,9 +46,10 @@ public class SyAddMeeting extends AppCompatActivity {
     private DatePicker date;
     private TimePicker time;
     private Spinner building;
+    private ImageButton backBtn;
     private FloatingActionButton addBtn;
     private GroupMeeting meeting;
-
+    private long mLastClickTime = 0;
     private SessionManager sm;
 
     private int year, month, day, hour, minute;
@@ -75,6 +80,7 @@ public class SyAddMeeting extends AppCompatActivity {
         topic       = findViewById(R.id.topicTxt);
         dText       = findViewById(R.id.Description);
         topicText   = findViewById(R.id.Topic);
+        backBtn     = findViewById(R.id.backBtn);
 
         weekNo.setMinValue(1);
         weekNo.setMaxValue(12);
@@ -134,7 +140,14 @@ public class SyAddMeeting extends AppCompatActivity {
             }
         });
 
-
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Intent intent = new Intent(getApplicationContext(), SyDashboardActivity.class);
+                //startActivity(intent);
+                finish();
+            }
+        });
 
 
         addBtn.setOnClickListener(new View.OnClickListener() {
@@ -142,8 +155,18 @@ public class SyAddMeeting extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View arg0) {
+
+                //Prevents double clicks
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                addBtn.setEnabled(false);
+
+                boolean flag;
+
                 year = date.getYear();
-                month = date.getMonth();
+                month = date.getMonth() - 1;
                 day = date.getDayOfMonth();
                 hour = time.getHour();
                 minute = time.getMinute();
@@ -160,17 +183,29 @@ public class SyAddMeeting extends AppCompatActivity {
                 }
                 strDate = strDate + "T" +strTime;
 
+                SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                try {
+                    Date tester = format1.parse(strDate);
+                    strDate = format1.format(tester);
+                    flag = true;
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                    flag = false;
+                }
 
-
-
-                meeting = new GroupMeeting();
-                meeting.setTopic(topic.getText().toString());
-                meeting.setDescription(desc.getText().toString());
-                meeting.setGMDate(strDate);
-                meeting.setBuilding(building.getSelectedItem().toString());
-                meeting.setRoom(room.getText().toString());
-                meeting.setWeekNum(weekNum);
-                getGroupId();
+                if(flag) {
+                    meeting = new GroupMeeting();
+                    meeting.setTopic(topic.getText().toString());
+                    meeting.setDescription(desc.getText().toString());
+                    meeting.setGMDate(strDate);
+                    meeting.setBuilding(building.getSelectedItem().toString());
+                    meeting.setRoom(room.getText().toString());
+                    meeting.setWeekNum(weekNum);
+                    getGroupId();
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "Please re-enter date/time.", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }

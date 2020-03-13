@@ -7,37 +7,35 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fyss.R;
 import com.fyss.model.FyUser;
+import com.fyss.model.Posts;
 
 import java.util.ArrayList;
 
-public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.MyViewHolder>{
+public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.MyViewHolder>{
 
-    private ArrayList<FyUser> membersList;
+    private ArrayList<Posts> posts;
     private RecyclerViewClickListener mListener;
 
 
-    public MembersAdapter(ArrayList<FyUser> membersList, RecyclerViewClickListener listener) {
-        this.membersList = membersList;
+    public PostsAdapter(ArrayList<Posts> posts, RecyclerViewClickListener listener) {
+        this.posts = posts;
         this.mListener = listener;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        private TextView nameTxt, emailTxt;
+        private TextView body, title;
         private RecyclerViewClickListener mListener;
-        private ConstraintLayout constInner;
 
         public MyViewHolder(View view, RecyclerViewClickListener listener) {
             super(view);
             mListener = listener;
             view.setOnClickListener(this);
-            nameTxt =  view.findViewById(R.id.nameItem);
-            constInner = view.findViewById(R.id.innerConst);
-            emailTxt = view.findViewById(R.id.emailTextView);
+            title =  view.findViewById(R.id.titleText);
+            body =  view.findViewById(R.id.bodyText);
         }
 
         @Override
@@ -50,34 +48,33 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.MyViewHo
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.members_items, parent, false);
+                .inflate(R.layout.post_items, parent, false);
 
         return new MyViewHolder(itemView, mListener);
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        FyUser user = membersList.get(position);
+        Posts post = posts.get(position);
 
-        String name = user.getFirstname() + " " + user.getSurname();
+        String t = post.getTitle();
+        String b = post.getBody();
 
-        holder.nameTxt.setText(name);
-        holder.emailTxt.setText(user.getEmail());
+        holder.title.setText(t);
+        holder.body.setText(b);
 
 
-        if(position %2 == 1)
+      /*  if(position %2 == 1)
         {
-            holder.constInner.setBackgroundColor(Color.parseColor("#EDE7F6"));
-        }
-       // else {
-      //      holder.itemView.setBackgroundColor(Color.parseColor("#86959f"));
-      //  }
+            holder.itemView.setBackgroundColor(Color.parseColor("#EDE7F6"));
+        }*/
+
 
     }
 
     @Override
     public int getItemCount() {
-        return membersList.size();
+        return posts.size();
     }
 
 

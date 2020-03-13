@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.fyss.R;
 import com.fyss.model.FyUser;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 public class MembersAttendanceAdapter extends RecyclerView.Adapter<MembersAttendanceAdapter.MyViewHolder>{
@@ -28,17 +30,32 @@ public class MembersAttendanceAdapter extends RecyclerView.Adapter<MembersAttend
         this.mListener = listener;
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView nameTxt;
         private RecyclerViewClickListener mListener;
-        private CheckBox checkBox;
+        private Switch switchBtn;
 
 
-        public MyViewHolder(View view, RecyclerViewClickListener listener) {
+        public MyViewHolder(final View view, RecyclerViewClickListener listener) {
             super(view);
             mListener = listener;
             nameTxt = view.findViewById(R.id.nameItem);
-            checkBox = view.findViewById(R.id.checkBox2);
+            switchBtn = view.findViewById(R.id.switch1);
+            switchBtn.setOnClickListener(this);
+            switchBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if(b){
+                        mListener.onClick(view,getAdapterPosition());
+                    }
+                }
+            });
+        }
+
+
+        @Override
+        public void onClick(View view) {
+            mListener.onClick(view, getAdapterPosition());
         }
     }
 
@@ -54,9 +71,9 @@ public class MembersAttendanceAdapter extends RecyclerView.Adapter<MembersAttend
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-        final FyUser user = membersList.get(position);
-        final int pos = position;
+    public void onBindViewHolder( MyViewHolder holder, int position) {
+        FyUser user = membersList.get(position);
+        int pos = position;
         String name = user.getFirstname() + " " + user.getSurname();
 
 
@@ -67,18 +84,7 @@ public class MembersAttendanceAdapter extends RecyclerView.Adapter<MembersAttend
 
         holder.nameTxt.setText(name);
 
-        holder.checkBox.setOnCheckedChangeListener(null);
 
-        //if true, your checkbox will be selected, else unselected
-        holder.checkBox.setChecked(user.isSelected());
-
-        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                //set your object's last status
-                user.setSelected(isChecked);
-            }
-        });
 
     }
 
@@ -88,9 +94,11 @@ public class MembersAttendanceAdapter extends RecyclerView.Adapter<MembersAttend
     }
 
 
+
+
     public interface RecyclerViewClickListener {
 
-        void onClick(View view, int position);
+        void onClick(View v, int position);
     }
 
 }

@@ -1,41 +1,47 @@
 package com.fyss.controller;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.nfc.NfcAdapter;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.CalendarContract;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 
 import com.fyss.R;
-import com.fyss.controller.ui.attendance.AttendanceActivity;
-import com.fyss.controller.ui.dashboard.sy.fragment.FragDashSy2;
-import com.fyss.model.Attendance;
 import com.fyss.model.GroupMeeting;
-import com.fyss.service.MyFirebaseMessagingService;
-import com.fyss.session.SessionManager;
 import com.google.gson.Gson;
 
-import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
-public class SyMeetingPageActivity extends AppCompatActivity {
+public class SyMeetingPageActivity extends AppCompatActivity{
 
-    private Button attendBtn, editBtn, pvaBtn;
-    private ImageButton backBtn;
+    private Button attendBtn, pvaBtn, qualBtn;
+    private ImageButton backBtn, editBtn;
     private SharedPreferences sharedPreferences;
     private Toolbar toolbar;
     private TextView meeting_num, topic, desc;
@@ -59,6 +65,7 @@ public class SyMeetingPageActivity extends AppCompatActivity {
         pvaBtn = findViewById(R.id.pvaBtn);
         pvaWeb = findViewById(R.id.pvaLink);
         backBtn = findViewById(R.id.backBtn);
+        qualBtn = findViewById(R.id.qualBtn);
 
 
         WebSettings webSettings = pvaWeb.getSettings();
@@ -76,12 +83,13 @@ public class SyMeetingPageActivity extends AppCompatActivity {
         attendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), AttendanceActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), SyAttendance.class);
                 //intent.putExtra("meeting", meeting);
                 saveMeeting(meeting);
                 startActivity(intent);
             }
         });
+
 
         pvaBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,6 +109,17 @@ public class SyMeetingPageActivity extends AppCompatActivity {
             }
         });
 
+        qualBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = getPackageManager().getLaunchIntentForPackage("com.qualtrics.xm");
+                if (i != null) {
+                    startActivity(i);
+                }
+
+            }
+        });
+
         editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,12 +132,13 @@ public class SyMeetingPageActivity extends AppCompatActivity {
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), SyDashboardActivity.class);
-                startActivity(intent);
+                //Intent intent = new Intent(getApplicationContext(), SyDashboardActivity.class);
+                //startActivity(intent);
                 finish();
             }
         });
     }
+
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event){

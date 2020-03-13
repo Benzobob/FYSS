@@ -1,11 +1,14 @@
 package com.fyss.controller;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -13,6 +16,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.fyss.R;
@@ -42,6 +46,7 @@ public class SyEditMeetingActivity extends AppCompatActivity {
     private Spinner building;
     private FloatingActionButton addBtn;
     private GroupMeeting meeting;
+    private ImageButton backBtn, delBtn;
 
     private SessionManager sm;
 
@@ -75,6 +80,8 @@ public class SyEditMeetingActivity extends AppCompatActivity {
         topic       = findViewById(R.id.topicTxt);
         dText       = findViewById(R.id.Description);
         topicText   = findViewById(R.id.Topic);
+        delBtn      = findViewById(R.id.delBtn);
+        backBtn     = findViewById(R.id.backBtn);
 
         weekNo.setMinValue(1);
         weekNo.setMaxValue(12);
@@ -136,6 +143,22 @@ public class SyEditMeetingActivity extends AppCompatActivity {
             }
         });
 
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Intent intent = new Intent(getApplicationContext(), SyDashboardActivity.class);
+                //startActivity(intent);
+                finish();
+            }
+        });
+
+        delBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                verifyDelete();
+            }
+        });
+
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -164,6 +187,67 @@ public class SyEditMeetingActivity extends AppCompatActivity {
                 meeting.setRoom(room.getText().toString());
                 meeting.setWeekNum(weekNum);
                 updateMeeting(meeting);
+            }
+        });
+    }
+
+    private void verifyDelete() {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(which == DialogInterface.BUTTON_POSITIVE) {
+                    deleteAttendance();
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AppTheme));
+        builder.setMessage("Are you sure you want \n to delete this meeting?").setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener).show();
+    }
+
+    private void deleteAttendance() {
+        Call<Void> call = jsonPlaceHolderApi.removeAttendance(meeting.getGmid());
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (!response.isSuccessful()) {
+                    String result = "Cde: " + response.code();
+                    Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+                    return;
+                }
+                deleteMeeting();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void deleteMeeting() {
+        Call<Void> call = jsonPlaceHolderApi.removeMeeting(meeting.getGmid().toString());
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (!response.isSuccessful()) {
+                    String result = "Cde: " + response.code();
+                    Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+                    return;
+                }
+                Toast.makeText(getApplicationContext(), "Meeting Deleted.", Toast.LENGTH_LONG).show();
+
+                Intent i = new Intent(getApplicationContext(), SyDashboardActivity.class);
+                startActivity(i);
+                finish();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }

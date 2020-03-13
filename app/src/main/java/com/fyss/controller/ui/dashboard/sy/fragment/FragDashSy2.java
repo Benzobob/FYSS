@@ -82,11 +82,9 @@ public class FragDashSy2 extends Fragment {
             public void onClick(View view, int position) {
 
                 GroupMeeting m = meetingsList.get(position);
-               // Toast.makeText(FragDashSy2.this.getContext(), "Week num " + m.getWeekNum(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), SyMeetingPageActivity.class);
                 intent.putExtra("meeting", m);
                 startActivity(intent);
-
             }
         };
 
@@ -141,6 +139,7 @@ public class FragDashSy2 extends Fragment {
             }
         });
     }
+
 
 
     // TODO: Rename method, update argument and hook method into UI event

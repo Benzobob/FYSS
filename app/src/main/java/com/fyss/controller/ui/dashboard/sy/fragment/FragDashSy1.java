@@ -6,6 +6,9 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,13 +19,23 @@ import android.widget.Toast;
 
 import com.fyss.R;
 import com.fyss.controller.LoginActivity;
+import com.fyss.controller.SyAddMeeting;
+import com.fyss.controller.SyAddPostActivity;
 import com.fyss.controller.SyDashboardActivity;
+import com.fyss.controller.SyMeetingPageActivity;
+import com.fyss.controller.ui.dashboard.adapter.MeetingsAdapter;
+import com.fyss.controller.ui.dashboard.adapter.PostsAdapter;
+import com.fyss.model.GroupMeeting;
+import com.fyss.model.Posts;
 import com.fyss.network.JsonPlaceHolderApi;
 import com.fyss.network.RetrofitClientInstance;
 import com.fyss.service.MyFirebaseMessagingService;
 import com.fyss.session.SessionManager;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -42,9 +55,17 @@ import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
  */
 public class FragDashSy1 extends Fragment {
 
-    private SessionManager session;
     private OnFragmentInteractionListener mListener;
     private String fcmToken;
+    private Button addPostBtn;
+    private ArrayList<Posts> posts;
+    private RecyclerView recyclerView;
+    private PostsAdapter mAdapter;
+    private Retrofit retrofit;
+    private JsonPlaceHolderApi jsonPlaceHolderApi;
+    private PostsAdapter.RecyclerViewClickListener listener;
+    private SessionManager sm;
+    private int syid;
 
     public FragDashSy1() {
         // Required empty public constructor
@@ -62,7 +83,7 @@ public class FragDashSy1 extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        session = new SessionManager(getActivity().getApplicationContext());
+        sm = new SessionManager(getActivity().getApplicationContext());
     }
 
     @Override
@@ -72,8 +93,67 @@ public class FragDashSy1 extends Fragment {
 
         final View frag1 = inflater.inflate(R.layout.fragment_frag_dash_sy1, container, false);
 
+        retrofit = RetrofitClientInstance.getRetrofitInstance();
+        jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        recyclerView = (RecyclerView) frag1.findViewById(R.id.recyclerViewPost);
+
+
+       /* listener = new MeetingsAdapter.RecyclerViewClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+
+                Posts post = posts.get(position);
+                Intent intent = new Intent(getActivity(), SyMeetingPageActivity.class);
+                intent.putExtra("meeting", post);
+                startActivity(intent);
+            }
+        };*/
+
+        HashMap<String, String> user = sm.getUserDetails();
+        if (user.get(SessionManager.KEY_USER_ID) != null) {
+            syid = Integer.parseInt(user.get(SessionManager.KEY_USER_ID));
+        }
+
+        addPostBtn = frag1.findViewById(R.id.addPostBtn);
+
+        addPostBtn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                Intent intent = new Intent(getActivity(), SyAddPostActivity.class);
+                startActivity(intent);
+            }
+        });
+        preparePosts();
         return frag1;
 
+    }
+
+    private void preparePosts() {
+        Call<List<Posts>> call = jsonPlaceHolderApi.getPostsSy(syid);
+
+        call.enqueue(new Callback<List<Posts>>() {
+            @Override
+            public void onResponse(Call<List<Posts>> call, Response<List<Posts>> response) {
+                if (!response.isSuccessful()) {
+                    String result = "Code: " + response.code();
+                    return;
+                }
+
+                posts = new ArrayList<>(response.body());
+                mAdapter = new PostsAdapter(posts, listener);
+                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+                recyclerView.setLayoutManager(mLayoutManager);
+                recyclerView.setItemAnimator(new DefaultItemAnimator());
+                recyclerView.setAdapter(mAdapter);
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Posts>> call, Throwable t) {
+                Toast.makeText(getActivity().getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
 

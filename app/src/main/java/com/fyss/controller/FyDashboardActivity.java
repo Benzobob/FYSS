@@ -6,27 +6,20 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
 import com.fyss.R;
-import com.fyss.controller.ui.attendance.FyAttendance;
 import com.fyss.controller.ui.dashboard.adapter.SectionsPagerAdapterFy;
 import com.fyss.controller.ui.dashboard.fy.fragment.FragDashFy1;
 import com.fyss.controller.ui.dashboard.fy.fragment.FragDashFy2;
 import com.fyss.controller.ui.dashboard.fy.fragment.FragDashFy3;
-import com.fyss.model.FyUser;
 import com.fyss.session.SessionManager;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.HashMap;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 public class FyDashboardActivity extends AppCompatActivity

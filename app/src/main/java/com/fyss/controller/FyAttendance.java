@@ -1,4 +1,4 @@
-package com.fyss.controller.ui.attendance;
+package com.fyss.controller;
 
 
 import android.app.PendingIntent;
@@ -23,8 +23,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
 import com.fyss.R;
-import com.fyss.controller.ui.attendance.adapter.SectionsPagerAdapter;
-import com.fyss.controller.ui.dashboard.adapter.SectionsPagerAdapterFy;
+
 import com.fyss.model.Attendance;
 import com.fyss.model.FyUser;
 import com.fyss.model.GroupMeeting;
@@ -55,75 +54,19 @@ public class FyAttendance extends AppCompatActivity
     private Retrofit retrofit;
     private JsonPlaceHolderApi jsonPlaceHolderApi;
     private static final int MESSAGE_SENT = 1;
-    private GroupMeeting meeting;
     private SharedPreferences sharedPreferences;
     private SessionManager sm;
-    private PendingIntent pendingIntent;
-    IntentFilter [] mFilters;
-    String[][] mTechLists;
-    private String attendanceId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
-        IntentFilter ndef = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
-
-        try {
-            ndef.addDataType("*/*");
-        }
-        catch(IntentFilter.MalformedMimeTypeException e){
-            throw new RuntimeException("fail", e);
-        }
-
-        mFilters = new IntentFilter [] {
-                ndef,
-        };
-
-        mTechLists = new String [] [] {new String []  {NfcF.class.getName()}};
-
         sm = new SessionManager(getApplicationContext());
         retrofit = RetrofitClientInstance.getRetrofitInstance();
         jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-
-
-        HashMap<String, String> user = sm.getUserDetails();
-        if (user.get(SessionManager.KEY_USER_TYPE) != null) {
-            if (user.get(SessionManager.KEY_USER_TYPE).equals("FY")) {
-                setContentView(R.layout.activity_attendance_fy);
-                Toast.makeText(getApplicationContext(), " fy", Toast.LENGTH_LONG).show();
-
-            } else {
-                setContentView(R.layout.activity_attendance);
-
-                if(mNfcAdapter != null){
-                    mNfcAdapter.setNdefPushMessage(null, this);
-                }
-                SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
-
-                ViewPager viewPager = findViewById(R.id.view_pager);
-                viewPager.setAdapter(sectionsPagerAdapter);
-
-                TabLayout tabs = findViewById(R.id.tabs);
-                tabs.setupWithViewPager(viewPager);
-
-                meeting = getMeeting();
-            }
-        }
+        setContentView(R.layout.activity_attendance_fy);
         mNfcAdapter.setNdefPushMessageCallback(this, this);
     }
-
-    private GroupMeeting getMeeting() {
-        Gson gson = new Gson();
-        sharedPreferences = getSharedPreferences("Meeting", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        String jsonText = sharedPreferences.getString("meeting", null);
-        GroupMeeting m = gson.fromJson(jsonText, GroupMeeting.class);
-        return m;
-    }
-
-
 
     /**
      * Implementation for the CreateNdefMessageCallback interface
@@ -154,8 +97,6 @@ public class FyAttendance extends AppCompatActivity
      */
     @Override
     public void onNdefPushComplete(NfcEvent arg0) {
-        // A handler is needed to send messages to the activity when this
-        // callback occurs, because it happens from a binder thread
         mHandler.obtainMessage(MESSAGE_SENT).sendToTarget();
     }
 

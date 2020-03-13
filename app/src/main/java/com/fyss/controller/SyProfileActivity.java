@@ -58,9 +58,9 @@ public class SyProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent;
-                if(type.matches("SY")){intent = new Intent(getApplicationContext(), SyDashboardActivity.class);}
-                else{intent = new Intent(getApplicationContext(), FyDashboardActivity.class);}
-                startActivity(intent);
+               // if(type.matches("SY")){intent = new Intent(getApplicationContext(), SyDashboardActivity.class);}
+                //else{intent = new Intent(getApplicationContext(), FyDashboardActivity.class);}
+                //startActivity(intent);
                 finish();
             }
         });

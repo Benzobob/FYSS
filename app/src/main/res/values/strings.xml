@@ -17,10 +17,9 @@
     <string name="title_activity_dashboard_sy">DashboardSyActivity</string>
     <string name="tab_text_1">Meetings</string>
     <string name="tab_text_2">Posts</string>
-    <string name="tab_text_3">Members</string>
+    <string name="tab_text_3">My Group</string>
     <string name="tab_text_4">NFC</string>
     <string name="tab_text_5">Manual</string>
-
 
 
     <string-array name="buildings">
@@ -76,4 +75,10 @@
     <string name="title_activity_attendance">AttendanceActivity</string>
     <string name="check_boxes_to_submit_attendance_record">Check boxes to submit attendance record.</string>
     <string name="move_devices_together_to_record_attendance">Move devices together to record attendance.</string>
+    <string name="title_activity_attend">attend</string>
+    <string name="qualtrics">Qualtrics</string>
+    <string name="pva">PVA</string>
+    <string name="create_post">Create Post</string>
+    <string name="create_new_post">Create New Post</string>
+    <string name="nuMeeting">Create New Meeting</string>
 </resources>

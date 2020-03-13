@@ -24,7 +24,7 @@ import retrofit2.Retrofit;
 public class SyEditProfileActivity extends AppCompatActivity {
     private SessionManager session;
     private String fcmToken;
-    private ImageButton logout;
+    private ImageButton logout, backBtn;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,6 +36,7 @@ public class SyEditProfileActivity extends AppCompatActivity {
 
 
         logout = findViewById(R.id.logoutBtn);
+        backBtn = findViewById(R.id.backBtn);
 
         MyFirebaseMessagingService m = new MyFirebaseMessagingService();
         fcmToken = m.getToken(getApplicationContext());
@@ -50,6 +51,14 @@ public class SyEditProfileActivity extends AppCompatActivity {
                 removeFcmToken(fcmToken);
                 Intent intent = new Intent(SyEditProfileActivity.this, LoginActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        backBtn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                finish();
             }
         });
     }

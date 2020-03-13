@@ -4,6 +4,7 @@ import com.fyss.model.FCM_Token;
 import com.fyss.model.FyUser;
 import com.fyss.model.Group;
 import com.fyss.model.GroupMeeting;
+import com.fyss.model.Posts;
 import com.fyss.model.SyUser;
 import com.google.gson.JsonObject;
 
@@ -33,6 +34,9 @@ public interface JsonPlaceHolderApi {
    @POST("fyss.fcmtokens")
    Call<Void> create(@Body FCM_Token token);
 
+   @POST("fyss.posts")
+   Call<Void> create(@Body Posts post);
+
    @PUT("fyss.attendance/edit/{id}")
    Call<Void> editAttendance(@Path("id") int id, @Body Attendance attendance);
 
@@ -55,6 +59,12 @@ public interface JsonPlaceHolderApi {
 
    @DELETE("fyss.fcmtokens/{id}")
    Call<Void> removeFcmToken(@Path("id") String token);
+
+   @DELETE("fyss.groupmeetings/{id}")
+   Call<Void> removeMeeting(@Path("id") String id);
+
+   @GET("fyss.attendance/remove/{gmid}")
+   Call<Void> removeAttendance(@Path("gmid") int gmid);
 
    @GET("fyss.groups/getGroup/{gid}")
    Call<Group> findGroupById(@Path("gid") int gid);
@@ -85,4 +95,10 @@ public interface JsonPlaceHolderApi {
 
    @GET("fyss.usersfy/getRemainingStudents/{gmid}")
    Call<List<FyUser>> getRemainingStudents(@Path("gmid") int gmid);
+
+   @GET("fyss.groups/getGroupSy/{syid}")
+   Call<Group> getGroupSy(@Path("syid") int syid);
+
+   @GET("fyss.posts/getPostsSy/{syid}")
+   Call<List<Posts>> getPostsSy(@Path("syid") int syid);
 }

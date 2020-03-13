@@ -54,10 +54,10 @@ public class FyProfileActivity extends AppCompatActivity {
         homeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent;
-                if(type.matches("FY")){intent = new Intent(getApplicationContext(), FyDashboardActivity.class);}
-                else{intent = new Intent(getApplicationContext(), SyDashboardActivity.class);}
-                startActivity(intent);
+                //Intent intent;
+                //if(type.matches("FY")){intent = new Intent(getApplicationContext(), FyDashboardActivity.class);}
+                //else{intent = new Intent(getApplicationContext(), SyDashboardActivity.class);}
+                //startActivity(intent);
                 finish();
             }
         });

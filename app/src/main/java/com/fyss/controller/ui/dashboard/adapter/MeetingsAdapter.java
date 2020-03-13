@@ -17,9 +17,10 @@ import com.fyss.model.GroupMeeting;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
-public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.MyViewHolder>{
+public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.MyViewHolder> {
 
     private ArrayList<GroupMeeting> meetingsList;
     private RecyclerViewClickListener mListener;
@@ -30,7 +31,7 @@ public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.MyView
         this.mListener = listener;
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView weekNo, date, time, building, room;
         private LinearLayout when, where;
 
@@ -40,11 +41,11 @@ public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.MyView
             super(view);
             mListener = listener;
             view.setOnClickListener(this);
-            weekNo =  view.findViewById(R.id.meetingNum);
-            date =  view.findViewById(R.id.date);
-            time =  view.findViewById(R.id.time);
+            weekNo = view.findViewById(R.id.meetingNum);
+            date = view.findViewById(R.id.date);
+            time = view.findViewById(R.id.time);
             building = view.findViewById(R.id.building);
-            room =  view.findViewById(R.id.room);
+            room = view.findViewById(R.id.room);
             when = view.findViewById(R.id.whenLayout);
             where = view.findViewById(R.id.whereLayout);
         }
@@ -70,24 +71,28 @@ public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.MyView
 
         String format1 = "yyyy-MM-dd";
         String format2 = "dd-MM-yyyy";
-
-        String date = meeting.getGMDate();
-        String[] parts = date.split("T");
-        date = parts[0];
-        String time = parts[1];
-
-        time = time.substring(0, time.length() - 3);
-
-        SimpleDateFormat formatter = new SimpleDateFormat(format1);
+        String time = "";
         Date d = null;
-        try {
-            d = formatter.parse(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        formatter.applyPattern(format2);
-        date = formatter.format(d);
+        String date = meeting.getGMDate();
+        if (date != null) {
+            String[] parts = date.split("T");
+            date = parts[0];
+            time = parts[1];
 
+            time = time.substring(0, time.length() - 3);
+
+            SimpleDateFormat formatter = new SimpleDateFormat(format1);
+            try {
+                d = formatter.parse(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            formatter.applyPattern(format2);
+            date = formatter.format(d);
+
+        }
+
+        boolean flag = checkIfMeetingHasHappened(meeting, d);
 
         holder.date.setText(date);
         holder.time.setText(time);
@@ -95,13 +100,23 @@ public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.MyView
         holder.weekNo.setText("Meeting - Week " + meeting.getWeekNum().toString());
         holder.room.setText(meeting.getRoom());
 
-        if(position %2 == 1)
-        {
+        if (position % 2 == 1) {
             holder.where.setBackgroundColor(Color.parseColor("#D1C4E9"));
             holder.when.setBackgroundColor(Color.parseColor("#EDE7F6"));
         }
 
+    }
 
+    private boolean checkIfMeetingHasHappened(GroupMeeting meeting, Date meetTime) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.add(Calendar.HOUR_OF_DAY, 1);
+        Date current = cal.getTime();
+        if(current.after(meetTime)){
+            return true;
+        }
+        else
+            return false;
     }
 
     @Override

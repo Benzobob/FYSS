@@ -58,7 +58,6 @@ public class FragDashSy3 extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     public FragDashSy3() {
-        // Required empty public constructor
     }
 
     public static FragDashSy3 newInstance() {
@@ -92,7 +91,6 @@ public class FragDashSy3 extends Fragment {
             public void onClick(View view, int position) {
 
                 FyUser m = membersList.get(position);
-                // Toast.makeText(FragDashSy2.this.getContext(), "Week num " + m.getWeekNum(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), FyProfileActivity.class);
                 intent.putExtra("FyId", m.getFyid().toString());
                 startActivity(intent);
@@ -157,16 +155,7 @@ public class FragDashSy3 extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
     }
@@ -185,9 +174,6 @@ public class FragDashSy3 extends Fragment {
                 }
 
                 membersList = new ArrayList<>(response.body());
-                String k = "" + membersList.size();
-                Toast.makeText(getActivity().getApplicationContext(), k, Toast.LENGTH_LONG).show();
-
                 mAdapter = new MembersAdapter(membersList, listener);
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
                 recyclerView.setLayoutManager(mLayoutManager);
