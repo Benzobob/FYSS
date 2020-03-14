@@ -16,10 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fyss.R;
-import com.fyss.controller.SyAddMeeting;
-import com.fyss.controller.SyMeetingPageActivity;
+import com.fyss.controller.FyMeetingPageActivity;
 import com.fyss.controller.ui.dashboard.adapter.MeetingsAdapter;
-import com.fyss.model.FyUser;
 import com.fyss.model.GroupMeeting;
 import com.fyss.network.JsonPlaceHolderApi;
 import com.fyss.network.RetrofitClientInstance;
@@ -78,8 +76,7 @@ public class FragDashFy2 extends Fragment {
             public void onClick(View view, int position) {
 
                 GroupMeeting m = meetingsList.get(position);
-                Toast.makeText(FragDashFy2.this.getContext(), "Week num " + m.getWeekNum(), Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getActivity(), SyMeetingPageActivity.class);
+                Intent intent = new Intent(getActivity(), FyMeetingPageActivity.class);
                 intent.putExtra("meeting", m);
                 startActivity(intent);
 
@@ -111,10 +108,6 @@ public class FragDashFy2 extends Fragment {
                 }
 
                 meetingsList = new ArrayList<>(response.body());
-                String k = "" + meetingsList.size();
-                Toast.makeText(getActivity().getApplicationContext(), k, Toast.LENGTH_LONG).show();
-
-
                 mAdapter = new MeetingsAdapter(meetingsList, listener);
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
                 recyclerView.setLayoutManager(mLayoutManager);

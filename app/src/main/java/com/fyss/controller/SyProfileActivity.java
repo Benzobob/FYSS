@@ -57,10 +57,6 @@ public class SyProfileActivity extends AppCompatActivity {
         homeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent;
-               // if(type.matches("SY")){intent = new Intent(getApplicationContext(), SyDashboardActivity.class);}
-                //else{intent = new Intent(getApplicationContext(), FyDashboardActivity.class);}
-                //startActivity(intent);
                 finish();
             }
         });
@@ -122,5 +118,8 @@ public class SyProfileActivity extends AppCompatActivity {
                 setOnClickListeners("FY");
             }
         }
+    }
+
+    public void setProfilePicture(View view) {
     }
 }

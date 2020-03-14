@@ -2,14 +2,18 @@ package com.fyss.controller.ui.dashboard.sy.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +29,13 @@ import com.fyss.model.GroupMeeting;
 import com.fyss.network.JsonPlaceHolderApi;
 import com.fyss.network.RetrofitClientInstance;
 import com.fyss.session.SessionManager;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,7 +80,10 @@ public class FragDashSy3 extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sm = new SessionManager(getActivity().getApplicationContext());
+
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -81,10 +94,12 @@ public class FragDashSy3 extends Fragment {
         jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
         recyclerView = (RecyclerView) frag3.findViewById(R.id.recyclerView1);
 
+
         HashMap<String, String> user = sm.getUserDetails();
         if (user.get(SessionManager.KEY_USER_ID) != null) {
             getGroupId(Integer.parseInt(user.get(SessionManager.KEY_USER_ID)));
         }
+
 
         listener = new MembersAdapter.RecyclerViewClickListener() {
             @Override

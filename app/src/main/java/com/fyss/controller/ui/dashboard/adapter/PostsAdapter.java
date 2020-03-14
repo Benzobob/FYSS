@@ -26,22 +26,22 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.MyViewHolder
         this.mListener = listener;
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class MyViewHolder extends RecyclerView.ViewHolder{ //implements View.OnClickListener{
         private TextView body, title;
         private RecyclerViewClickListener mListener;
 
         public MyViewHolder(View view, RecyclerViewClickListener listener) {
             super(view);
             mListener = listener;
-            view.setOnClickListener(this);
+           // view.setOnClickListener(this);
             title =  view.findViewById(R.id.titleText);
             body =  view.findViewById(R.id.bodyText);
         }
 
-        @Override
+       /* @Override
         public void onClick(View view) {
             mListener.onClick(view, getAdapterPosition());
-        }
+        }*/
     }
 
     @Override

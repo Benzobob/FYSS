@@ -14,14 +14,13 @@
         android:required="true" />
 
     <application
-        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true"
-        tools:ignore="GoogleAppIndexingWarning">
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
 
         <activity
             android:name=".controller.SyAddMeeting"
@@ -55,12 +54,12 @@
         <activity android:name=".controller.SyEditProfileActivity" />
         <activity android:name=".controller.FyEditProfileActivity" />
         <activity android:name=".controller.FyAttendance" />
+        <activity android:name=".controller.FyMeetingPageActivity"/>
+
         <activity android:name=".controller.SyAttendance">
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-
                 <category android:name="android.intent.category.DEFAULT" />
-
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
@@ -80,6 +79,7 @@
  Set color used with incoming notification messages. This is used when no color is set for the incoming
              notification message. See README(https://goo.gl/6BKBk7) for more.
         -->
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />

@@ -101,4 +101,10 @@ public interface JsonPlaceHolderApi {
 
    @GET("fyss.posts/getPostsSy/{syid}")
    Call<List<Posts>> getPostsSy(@Path("syid") int syid);
+
+   @GET("fyss.posts/getPostsByGroup/{gid}")
+   Call<List<Posts>> getPostsGroup(@Path("gid") int gid);
+
+   @PUT("fyss.usersfy/{id}")
+   Call<Void> editFyUser(@Path("id") int id, @Body FyUser user);
 }

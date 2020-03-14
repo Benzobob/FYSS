@@ -50,7 +50,7 @@ public class FragDashFy3 extends Fragment {
     private JsonPlaceHolderApi jsonPlaceHolderApi;
     private MembersAdapter.RecyclerViewClickListener listener;
     private SessionManager sm;
-
+    private FyUser user;
     private OnFragmentInteractionListener mListener;
 
     public FragDashFy3() {
@@ -80,7 +80,7 @@ public class FragDashFy3 extends Fragment {
 
         HashMap<String, String> user = sm.getUserDetails();
         if (user.get(SessionManager.KEY_USER_ID) != null) {
-            getGroupId(Integer.parseInt(user.get(SessionManager.KEY_USER_ID)));
+            setUser(Integer.parseInt(user.get(SessionManager.KEY_USER_ID)));
         }
 
         listener = new MembersAdapter.RecyclerViewClickListener() {
@@ -99,36 +99,27 @@ public class FragDashFy3 extends Fragment {
         return frag3;
     }
 
-    private void getGroupId(int id) {
-        Call<ResponseBody> call = jsonPlaceHolderApi.getGroupId(id);
+    private void setUser(int fyid) {
+        Call<FyUser> call = jsonPlaceHolderApi.findFyUserById(fyid);
 
-        call.enqueue(new Callback<ResponseBody>() {
+        call.enqueue(new Callback<FyUser>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(Call<FyUser> call, Response<FyUser> response) {
                 if (!response.isSuccessful()) {
                     String result = "Code: " + response.code();
                     Toast.makeText(getActivity().getApplicationContext(), result, Toast.LENGTH_LONG).show();
-                    return;
+                } else {
+                    user = response.body();
+                    prepareMembersData(user.getGid().getGid());
                 }
-                else{
-                    String gid = null;
-                    try {
-                        gid = response.body().string();
-                        prepareMembersData(Integer.parseInt(gid));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-
             }
-
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<FyUser> call, Throwable t) {
                 Toast.makeText(getActivity().getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -182,18 +173,18 @@ public class FragDashFy3 extends Fragment {
                 }
 
                 membersList = new ArrayList<>(response.body());
-                String k = "" + membersList.size();
-                Toast.makeText(getActivity().getApplicationContext(), k, Toast.LENGTH_LONG).show();
 
-
+                for(int i = 0; i < membersList.size(); i++){
+                    if(membersList.get(i).getFyid().equals(user.getFyid())){
+                        membersList.remove(i);
+                    }
+                }
 
                 mAdapter = new MembersAdapter(membersList, listener);
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
                 recyclerView.setLayoutManager(mLayoutManager);
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
                 recyclerView.setAdapter(mAdapter);
-
-
 
             }
 

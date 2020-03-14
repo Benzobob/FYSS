@@ -29,6 +29,9 @@ public class FyUser implements Serializable {
     @SerializedName("gid")
     @Expose
     private Group gid;
+    @SerializedName("profileImg")
+    @Expose
+    private String profileImg;
 
     private boolean isSelected;
 
@@ -94,6 +97,14 @@ public class FyUser implements Serializable {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public String getProfileImg() {
+        return profileImg;
+    }
+
+    public void setProfileImg(String profileImg) {
+        this.profileImg = profileImg;
     }
 
 }
