@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/tertiary"
     android:orientation="vertical"
     tools:context=".controller.ui.dashboard.sy.fragment.FragDashSy2">
 
@@ -25,6 +26,7 @@
         android:id="@+id/recyclerViewPost"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="?attr/backg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,7 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="1.5dp"
         android:layout_marginTop="10dp"
-        android:background="@color/colorPrimaryDark"
+        android:background="?attr/dividerColor"
         app:layout_constraintTop_toBottomOf="@+id/addPostBtn"
         tools:layout_editor_absoluteX="-1dp" />
 

@@ -2,11 +2,13 @@ package com.fyss.controller;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
-
+import static com.fyss.service.Const.PREFS_NAME;
+import static com.fyss.service.Const.PREF_DARK_THEME;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
@@ -35,6 +37,14 @@ public class FyDashboardActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        boolean useDarkTheme = preferences.getBoolean(PREF_DARK_THEME, false);
+
+        if(useDarkTheme) {
+            setTheme(R.style.AppTheme_DarkTheme_NoActionBar);
+        }else{
+            setTheme(R.style.AppTheme_LightTheme_NoActionBar);
+        }
         setContentView(R.layout.activity_home_fy);
         sm = new SessionManager(getApplicationContext());
 
@@ -68,6 +78,7 @@ public class FyDashboardActivity extends AppCompatActivity
             public void onClick(View arg0) {
                 Intent intent = new Intent(FyDashboardActivity.this, FyAttendance.class);
                 startActivity(intent);
+
             }
         });
 

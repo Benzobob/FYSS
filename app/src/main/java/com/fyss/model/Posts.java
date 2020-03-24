@@ -3,7 +3,9 @@ package com.fyss.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Posts {
+import java.io.Serializable;
+
+public class Posts  implements Serializable {
 
     @SerializedName("body")
     @Expose

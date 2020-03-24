@@ -1,6 +1,7 @@
 package com.fyss.controller.ui.dashboard.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -12,6 +13,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import static android.content.Context.MODE_PRIVATE;
+import static com.fyss.service.Const.PREFS_NAME;
+import static com.fyss.service.Const.PREF_DARK_THEME;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
@@ -88,6 +92,16 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.MyViewHo
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         context = parent.getContext();
+
+        SharedPreferences preferences = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        boolean useDarkTheme = preferences.getBoolean(PREF_DARK_THEME, false);
+
+        if(useDarkTheme) {
+            parent.getContext().setTheme(R.style.AppTheme_DarkTheme_NoActionBar);
+        }else{
+            parent.getContext().setTheme(R.style.AppTheme_LightTheme_NoActionBar);
+        }
+
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.members_items, parent, false);
 
@@ -120,7 +134,6 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.MyViewHo
         if(position %2 == 1)
         {
             holder.constInner.setBackgroundColor(Color.parseColor("#EDE7F6"));
-            holder.profPic.setBackgroundColor(Color.parseColor("#EDE7F6"));
         }
 
     }

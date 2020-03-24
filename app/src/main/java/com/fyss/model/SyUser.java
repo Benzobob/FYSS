@@ -30,6 +30,9 @@ public class SyUser implements Serializable {
     @SerializedName("syid")
     @Expose
     private Integer syid;
+    @SerializedName("profileImg")
+    @Expose
+    private String profileImg;
 
 
 
@@ -87,6 +90,14 @@ public class SyUser implements Serializable {
 
     public void setSyid(Integer syid) {
         this.syid = syid;
+    }
+
+    public String getProfileImg() {
+        return profileImg;
+    }
+
+    public void setProfileImg(String profileImg) {
+        this.profileImg = profileImg;
     }
 
 

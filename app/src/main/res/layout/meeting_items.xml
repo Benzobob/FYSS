@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorWhite">
+    android:background="?attr/backg">
 
   <LinearLayout
       android:id="@+id/linearLayout4"
@@ -16,6 +16,7 @@
       android:layout_marginEnd="10dp"
       android:layout_marginRight="10dp"
       android:layout_marginBottom="5dp"
+      android:background="#006F6F6F"
       android:orientation="vertical"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
@@ -27,7 +28,7 @@
         android:id="@+id/meetingNum"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:background="?attr/pDark"
         android:gravity="center_horizontal"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
@@ -40,21 +41,21 @@
         android:id="@+id/divider4"
         android:layout_width="match_parent"
         android:layout_height="1.5dp"
-        android:background="@color/colorPrimaryDark" />
+        android:background="?attr/dividerColorDark" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFFFFF"
+        android:background="@color/colorPurple1"
         android:orientation="horizontal">
 
 
       <LinearLayout
           android:id="@+id/whenLayout"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
+          android:layout_height="match_parent"
           android:layout_weight="1"
-          android:background="#D1C4E9"
+          android:background="@color/colorPurple1"
           android:orientation="vertical">
 
         <TextView
@@ -93,14 +94,14 @@
           android:id="@+id/divider9"
           android:layout_width="2dp"
           android:layout_height="match_parent"
-          android:background="@color/colorPrimaryDark" />
+          android:background="?attr/dividerColorDark" />
 
       <LinearLayout
           android:id="@+id/whereLayout"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_weight="1"
-          android:background="#EDE7F6"
+          android:background="@color/colorPurple2"
           android:orientation="vertical">
 
         <TextView
@@ -142,7 +143,7 @@
         android:id="@+id/divider13"
         android:layout_width="match_parent"
         android:layout_height="1.5dp"
-        android:background="@color/colorPrimaryDark" />
+        android:background="?attr/dividerColorDark" />
 
   </LinearLayout>
 
@@ -152,7 +153,7 @@
       android:layout_height="0dp"
       android:layout_marginTop="19dp"
       android:layout_marginBottom="5dp"
-      android:background="@color/colorPrimaryDark"
+      android:background="?attr/dividerColorDark"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toStartOf="@+id/linearLayout4"
       app:layout_constraintTop_toTopOf="parent" />
@@ -163,7 +164,7 @@
       android:layout_height="0dp"
       android:layout_marginTop="19dp"
       android:layout_marginBottom="5dp"
-      android:background="@color/colorPrimaryDark"
+      android:background="?attr/dividerColorDark"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintStart_toEndOf="@+id/linearLayout4"
       app:layout_constraintTop_toTopOf="parent" />
@@ -177,7 +178,7 @@
       android:layout_marginTop="19dp"
       android:layout_marginEnd="9dp"
       android:layout_marginRight="9dp"
-      android:background="@color/colorPrimaryDark"
+      android:background="?attr/dividerColorDark"
       app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"

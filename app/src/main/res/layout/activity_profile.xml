@@ -10,7 +10,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
+        android:background="?attr/secondary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme">
 
@@ -67,7 +67,6 @@
                 android:id="@+id/toolbar5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#E8F5E9"
                 android:minHeight="?attr/actionBarSize"
                 android:theme="?attr/actionBarTheme">
 
@@ -78,14 +77,13 @@
                     android:layout_height="150dp"
                     android:layout_centerHorizontal="true"
                     android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
                     android:clickable="true"
-                    android:onClick="setProfilePicture"
                     android:elevation="5dp"
-                    android:padding="20dp"
+                    android:onClick="setProfilePicture"
+                    android:padding="10dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_user"
-                    app:civ_border_color="@color/colorPrimary"
+                    app:civ_border_color="?attr/secondary"
                     app:civ_border_width="3dp"
                     tools:ignore="MissingConstraints" />
 
@@ -95,15 +93,16 @@
                 android:id="@+id/divider8"
                 android:layout_width="match_parent"
                 android:layout_height="1.5dp"
-                android:background="@color/colorPrimaryDark" />
+                android:layout_gravity="center_horizontal"
+                android:background="?attr/secondary" />
 
             <TextView
                 android:id="@+id/nameText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@color/colorPrimary"
-                android:gravity="center"
+                android:layout_gravity="center|center_horizontal"
+                android:background="?attr/primary"
+                android:gravity="center|center_horizontal"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
                 android:textColor="@android:color/background_light"
@@ -115,7 +114,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:background="@color/colorPrimary"
+                android:background="?attr/primary"
                 android:gravity="center"
                 android:paddingBottom="5dp"
                 android:textColor="@color/colorWhite" />
@@ -124,48 +123,169 @@
                 android:id="@+id/divider7"
                 android:layout_width="match_parent"
                 android:layout_height="1.5dp"
-                android:background="@color/colorPrimaryDark" />
+                android:background="?attr/secondary" />
 
-            <TextView
-                android:id="@+id/textView2"
+            <View
+                android:id="@+id/divider43"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingTop="10dp"
-                android:paddingBottom="5dp"
-                android:text="Contact Info:"
-                android:textSize="18sp" />
+                android:layout_height="1.5dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="50dp"
+                android:background="?attr/secondary" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal">
+
+
+                <View
+                    android:id="@+id/divider402"
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="?attr/secondary" />
+
+                <LinearLayout
+                    android:id="@+id/layout3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="#EDE7F6"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView22"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#D1C4E9"
+                        android:gravity="center"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="5dp"
+                        android:text="Bio:"
+                        android:textSize="18sp" />
+
+                    <View
+                        android:id="@+id/divider422"
+                        android:layout_width="match_parent"
+                        android:layout_height="1.5dp"
+                        android:background="?attr/secondary" />
+
+                    <TextView
+                        android:id="@+id/bioText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/divider412"
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="?attr/secondary" />
+
+            </LinearLayout>
 
             <View
                 android:id="@+id/divider3"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_gravity="center"
-                android:background="?android:attr/listDivider" />
-
-            <TextView
-                android:id="@+id/emailText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="15dp"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/numText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="15dp"
-                android:textSize="16sp" />
+                android:layout_height="1.5dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:background="?attr/secondary" />
 
             <View
-                android:id="@+id/divider6"
+                android:id="@+id/divider45"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_gravity="center"
-                android:background="?android:attr/listDivider" />
+                android:layout_height="1.5dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="50dp"
+                android:background="?attr/secondary" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal">
+
+
+                <View
+                    android:id="@+id/divider40"
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="?attr/secondary" />
+
+                <LinearLayout
+                    android:id="@+id/whenLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="#EDE7F6"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#D1C4E9"
+                        android:gravity="center"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="5dp"
+                        android:text="@string/contact_info"
+                        android:textSize="18sp" />
+
+                    <View
+                        android:id="@+id/divider42"
+                        android:layout_width="match_parent"
+                        android:layout_height="1.5dp"
+                        android:background="?attr/secondary" />
+
+                    <TextView
+                        android:id="@+id/emailText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="15dp"
+                        android:autoLink="email"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/numText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="15dp"
+                        android:autoLink="phone"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/divider41"
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="?attr/secondary" />
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/divider47"
+                android:layout_width="match_parent"
+                android:layout_height="1.5dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:background="?attr/secondary" />
 
         </LinearLayout>
     </ScrollView>

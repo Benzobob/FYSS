@@ -37,6 +37,7 @@ public class SessionManager {
 
     public static final String KEY_USER_TYPE = "type";
 
+
     // Constructor
     public SessionManager(Context context){
         this._context = context;
@@ -60,6 +61,7 @@ public class SessionManager {
         // Storing email in pref
         editor.putString(KEY_USER_TYPE, type);
 
+
         //decoding token
         JWT jwt = new JWT(token);
 
@@ -71,6 +73,7 @@ public class SessionManager {
         // commit changes
         editor.commit();
     }
+
 
 
 
@@ -107,7 +110,6 @@ public class SessionManager {
         user.put(KEY_EMAIL, pref.getString(KEY_EMAIL, null));
         user.put(KEY_USER_ID, pref.getString(KEY_USER_ID, null));
         user.put(KEY_USER_TYPE, pref.getString(KEY_USER_TYPE, null));
-
         // return user
         return user;
     }

@@ -22,7 +22,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
+import static com.fyss.service.Const.PREFS_NAME;
+import static com.fyss.service.Const.PREF_DARK_THEME;
 import com.fyss.R;
 import com.fyss.controller.adapter.MembersAttendanceAdapter;
 import com.fyss.model.Attendance;
@@ -68,6 +69,14 @@ public class SyAttendance extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        boolean useDarkTheme = preferences.getBoolean(PREF_DARK_THEME, false);
+
+        if(useDarkTheme) {
+            setTheme(R.style.AppTheme_DarkTheme_NoActionBar);
+        }else{
+            setTheme(R.style.AppTheme_LightTheme_NoActionBar);
+        }
         setContentView(R.layout.activity_attendance_sy);
         sm = new SessionManager(getApplicationContext());
         retrofit = RetrofitClientInstance.getRetrofitInstance();

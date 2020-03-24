@@ -1,6 +1,7 @@
 package com.fyss.controller.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,10 @@ import com.fyss.model.FyUser;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+
+import static android.content.Context.MODE_PRIVATE;
+import static com.fyss.service.Const.PREFS_NAME;
+import static com.fyss.service.Const.PREF_DARK_THEME;
 
 public class MembersAttendanceAdapter extends RecyclerView.Adapter<MembersAttendanceAdapter.MyViewHolder>{
 
@@ -64,6 +69,14 @@ public class MembersAttendanceAdapter extends RecyclerView.Adapter<MembersAttend
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
+        SharedPreferences preferences = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        boolean useDarkTheme = preferences.getBoolean(PREF_DARK_THEME, false);
+
+        if(useDarkTheme) {
+            parent.getContext().setTheme(R.style.AppTheme_DarkTheme_NoActionBar);
+        }else{
+            parent.getContext().setTheme(R.style.AppTheme_LightTheme_NoActionBar);
+        }
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.members_attend_items, parent, false);
 

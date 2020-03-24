@@ -1,9 +1,14 @@
 package com.fyss.controller;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -16,7 +21,8 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-
+import static com.fyss.service.Const.PREFS_NAME;
+import static com.fyss.service.Const.PREF_DARK_THEME;
 import com.fyss.R;
 import com.fyss.model.Group;
 import com.fyss.model.GroupMeeting;
@@ -51,6 +57,7 @@ public class SyAddMeeting extends AppCompatActivity {
     private GroupMeeting meeting;
     private long mLastClickTime = 0;
     private SessionManager sm;
+    private Double lon, lat;
 
     private int year, month, day, hour, minute;
 
@@ -60,6 +67,14 @@ public class SyAddMeeting extends AppCompatActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        boolean useDarkTheme = preferences.getBoolean(PREF_DARK_THEME, false);
+
+        if(useDarkTheme) {
+            setTheme(R.style.AppTheme_DarkTheme_NoActionBar);
+        }else{
+            setTheme(R.style.AppTheme_LightTheme_NoActionBar);
+        }
         setContentView(R.layout.activity_add_meeting);
         sm = new SessionManager(getApplicationContext());
 
@@ -166,7 +181,7 @@ public class SyAddMeeting extends AppCompatActivity {
                 boolean flag;
 
                 year = date.getYear();
-                month = date.getMonth() - 1;
+                month = date.getMonth();
                 day = date.getDayOfMonth();
                 hour = time.getHour();
                 minute = time.getMinute();
@@ -192,12 +207,16 @@ public class SyAddMeeting extends AppCompatActivity {
                     e.printStackTrace();
                     flag = false;
                 }
+                setLocation(building.getSelectedItem().toString());
 
                 if(flag) {
                     meeting = new GroupMeeting();
+                    meeting.setLat(lat);
+                    meeting.setLon(lon);
                     meeting.setTopic(topic.getText().toString());
                     meeting.setDescription(desc.getText().toString());
-                    meeting.setGMDate(strDate);
+                    //meeting.setGMDate(strDate);
+                    meeting.setDateStr(strDate);
                     meeting.setBuilding(building.getSelectedItem().toString());
                     meeting.setRoom(room.getText().toString());
                     meeting.setWeekNum(weekNum);
@@ -278,7 +297,6 @@ public class SyAddMeeting extends AppCompatActivity {
                     return;
                 }
                 Toast.makeText(getApplicationContext(), "Meeting Added.\nGroup will be notified.", Toast.LENGTH_LONG).show();
-
                 Intent i = new Intent(getApplicationContext(), SyDashboardActivity.class);
                 startActivity(i);
                 finish();
@@ -291,7 +309,50 @@ public class SyAddMeeting extends AppCompatActivity {
         });
     }
 
+    private void setLocation(String building) {
+        switch (building) {
+            case ("Computer Science"):
+                lon = 52.673961;
+                lat = -8.575635;
+                break;
+            case ("Foundation"):
+                lon = 52.674531;
+                lat = -8.573753;
+                break;
+            case ("Main"):
+                lon = 52.674030;
+                lat = -8.571921;
+                break;
+            case ("Schumann"):
+                lon = 52.673248;
+                lat = -8.577930;
+                break;
+            case ("Kemmy Business School"):
+                lon = 52.672649;
+                lat = -8.577061;
+                break;
+            case ("Tierney"):
+                lon = 52.674502;
+                lat = -8.577161;
+                break;
+            case ("Glucksman Library"):
+                lon = 52.673341;
+                lat = -8.573506;
+                break;
+            case ("Health Sciences"):
+                lon = 52.677759;
+                lat = -8.568910;
+                break;
+            case ("Schrödinger"):
+                lon = 52.673864;
+                lat =-8.567458;
+                break;
+        }
+    }
+
+
     public void hideOthers(int i){
+        int primaryColor = getColor(getApplicationContext(), R.attr.primary);
         switch (i) {
             case 1:
                 time.setVisibility(View.GONE);
@@ -305,9 +366,9 @@ public class SyAddMeeting extends AppCompatActivity {
                 topic.setVisibility(View.GONE);
                 dText.setVisibility(View.GONE);
                 topicText.setVisibility(View.GONE);
-                timeText.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-                infoText.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-                descText.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                timeText.setBackgroundColor(primaryColor);
+                infoText.setBackgroundColor(primaryColor);
+                descText.setBackgroundColor(primaryColor);
 
                 break;
             case 2:
@@ -322,9 +383,9 @@ public class SyAddMeeting extends AppCompatActivity {
                 topic.setVisibility(View.GONE);
                 dText.setVisibility(View.GONE);
                 topicText.setVisibility(View.GONE);
-                dateText.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-                infoText.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-                descText.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                dateText.setBackgroundColor(primaryColor);
+                infoText.setBackgroundColor(primaryColor);
+                descText.setBackgroundColor(primaryColor);
 
                 break;
             case 3:
@@ -334,9 +395,9 @@ public class SyAddMeeting extends AppCompatActivity {
                 topic.setVisibility(View.GONE);
                 dText.setVisibility(View.GONE);
                 topicText.setVisibility(View.GONE);
-                dateText.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-                timeText.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-                descText.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                dateText.setBackgroundColor(primaryColor);
+                timeText.setBackgroundColor(primaryColor);
+                descText.setBackgroundColor(primaryColor);
 
                 break;
             case 4:
@@ -348,11 +409,19 @@ public class SyAddMeeting extends AppCompatActivity {
                 buildText.setVisibility(View.GONE);
                 roomText.setVisibility(View.GONE);
                 weekText.setVisibility(View.GONE);
-                dateText.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-                timeText.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-                infoText.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                dateText.setBackgroundColor(primaryColor);
+                timeText.setBackgroundColor(primaryColor);
+                infoText.setBackgroundColor(primaryColor);
                 break;
         }
+    }
+
+    public int getColor(Context context, int colorResId) {
+        TypedValue typedValue = new TypedValue();
+        TypedArray typedArray = context.obtainStyledAttributes(typedValue.data, new int[] {colorResId});
+        int color = typedArray.getColor(0, 0);
+        typedArray.recycle();
+        return color;
     }
 
 }

@@ -22,6 +22,7 @@ import com.fyss.controller.LoginActivity;
 import com.fyss.controller.SyAddMeeting;
 import com.fyss.controller.SyAddPostActivity;
 import com.fyss.controller.SyDashboardActivity;
+import com.fyss.controller.SyEditPostActivity;
 import com.fyss.controller.SyMeetingPageActivity;
 import com.fyss.controller.ui.dashboard.adapter.MeetingsAdapter;
 import com.fyss.controller.ui.dashboard.adapter.PostsAdapter;
@@ -98,16 +99,16 @@ public class FragDashSy1 extends Fragment {
         recyclerView = (RecyclerView) frag1.findViewById(R.id.recyclerViewPost);
 
 
-       /* listener = new MeetingsAdapter.RecyclerViewClickListener() {
+        listener = new PostsAdapter.RecyclerViewClickListener() {
             @Override
             public void onClick(View view, int position) {
-
                 Posts post = posts.get(position);
-                Intent intent = new Intent(getActivity(), SyMeetingPageActivity.class);
-                intent.putExtra("meeting", post);
+                Intent intent = new Intent(getActivity(), SyEditPostActivity.class);
+                intent.putExtra("post", post);
                 startActivity(intent);
             }
-        };*/
+        };
+
 
         HashMap<String, String> user = sm.getUserDetails();
         if (user.get(SessionManager.KEY_USER_ID) != null) {

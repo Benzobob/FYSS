@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="primary" format="color"/>
+    <attr name="pDark" format="color"/>
+    <attr name="secondary" format="color"/>
+    <attr name="tertiary" format="color"/>
+    <attr name="backg" format="color"/>
+    <attr name="textColor1" format="color"/>
+    <attr name="textColor2" format="color"/>
+    <attr name="dividerColor" format="color"/>
+    <attr name="dividerColorDark" format="color"/>
+</resources>

@@ -33,6 +33,16 @@ public class GroupMeeting implements Serializable {
     @SerializedName("weekNum")
     @Expose
     private Integer weekNum;
+    @SerializedName("longitute")
+    @Expose
+    private Double lon;
+    @SerializedName("latitude")
+    @Expose
+    private Double lat;
+    @SerializedName("strDate")
+    @Expose
+    private String dateStr;
+
 
     public String getGMDate() {
         return gMDate;
@@ -82,6 +92,14 @@ public class GroupMeeting implements Serializable {
         this.description = description;
     }
 
+    public String getDateStr() {
+        return dateStr;
+    }
+
+    public void setDateStr(String dateStr) {
+        this.dateStr = dateStr;
+    }
+
     public String getTopic() {
         return topic;
     }
@@ -90,12 +108,28 @@ public class GroupMeeting implements Serializable {
         this.topic = topic;
     }
 
+    public Double getLat() {
+        return lat;
+    }
+
+    public void setLat(Double lat) {
+        this.lat = lat;
+    }
+
     public Integer getWeekNum() {
         return weekNum;
     }
 
     public void setWeekNum(Integer weekNum) {
         this.weekNum = weekNum;
+    }
+
+    public Double getLon() {
+        return lon;
+    }
+
+    public void setLon(Double lon) {
+        this.lon = lon;
     }
 
 }

@@ -94,6 +94,7 @@ public class FragDashSy2 extends Fragment {
         if (user.get(SessionManager.KEY_USER_ID) != null) {
             int id = Integer.parseInt(user.get(SessionManager.KEY_USER_ID));
             prepareMeetingsData(id);
+
         }
 
 
@@ -123,6 +124,7 @@ public class FragDashSy2 extends Fragment {
                 }
 
                 meetingsList = new ArrayList<>(response.body());
+
                 mAdapter = new MeetingsAdapter(meetingsList, listener);
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
                 recyclerView.setLayoutManager(mLayoutManager);

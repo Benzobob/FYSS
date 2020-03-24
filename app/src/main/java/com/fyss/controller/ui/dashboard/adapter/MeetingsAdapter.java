@@ -1,6 +1,7 @@
 package com.fyss.controller.ui.dashboard.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
+import static android.content.Context.MODE_PRIVATE;
+import static com.fyss.service.Const.PREFS_NAME;
+import static com.fyss.service.Const.PREF_DARK_THEME;
 
 public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.MyViewHolder> {
 
@@ -59,6 +64,16 @@ public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.MyView
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
+
+        SharedPreferences preferences = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        boolean useDarkTheme = preferences.getBoolean(PREF_DARK_THEME, false);
+
+        if(useDarkTheme) {
+            parent.getContext().setTheme(R.style.AppTheme_DarkTheme_NoActionBar);
+        }else{
+            parent.getContext().setTheme(R.style.AppTheme_LightTheme_NoActionBar);
+        }
+
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.meeting_items, parent, false);
 
@@ -73,7 +88,8 @@ public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.MyView
         String format2 = "dd-MM-yyyy";
         String time = "";
         Date d = null;
-        String date = meeting.getGMDate();
+        //String date = meeting.getGMDate();
+        String date = meeting.getDateStr();
         if (date != null) {
             String[] parts = date.split("T");
             date = parts[0];
@@ -92,7 +108,7 @@ public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.MyView
 
         }
 
-        boolean flag = checkIfMeetingHasHappened(meeting, d);
+       // boolean flag = checkIfMeetingHasHappened(meeting, d);
 
         holder.date.setText(date);
         holder.time.setText(time);

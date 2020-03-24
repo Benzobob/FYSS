@@ -1,12 +1,16 @@
 package com.fyss.controller.ui.dashboard.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import static android.content.Context.MODE_PRIVATE;
+import static com.fyss.service.Const.PREFS_NAME;
+import static com.fyss.service.Const.PREF_DARK_THEME;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fyss.R;
@@ -26,27 +30,37 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.MyViewHolder
         this.mListener = listener;
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{ //implements View.OnClickListener{
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView body, title;
         private RecyclerViewClickListener mListener;
 
         public MyViewHolder(View view, RecyclerViewClickListener listener) {
             super(view);
             mListener = listener;
-           // view.setOnClickListener(this);
+            view.setOnClickListener(this);
             title =  view.findViewById(R.id.titleText);
             body =  view.findViewById(R.id.bodyText);
         }
 
-       /* @Override
+        @Override
         public void onClick(View view) {
             mListener.onClick(view, getAdapterPosition());
-        }*/
+        }
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
+
+        SharedPreferences preferences = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        boolean useDarkTheme = preferences.getBoolean(PREF_DARK_THEME, false);
+
+        if(useDarkTheme) {
+            parent.getContext().setTheme(R.style.AppTheme_DarkTheme_NoActionBar);
+        }else{
+            parent.getContext().setTheme(R.style.AppTheme_LightTheme_NoActionBar);
+        }
+
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.post_items, parent, false);
 

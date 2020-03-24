@@ -81,4 +81,7 @@
     <string name="create_post">Create Post</string>
     <string name="create_new_post">Create New Post</string>
     <string name="nuMeeting">Create New Meeting</string>
+    <string name="contact_info">Contact Info:</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="dark_mode">Dark Mode</string>
 </resources>

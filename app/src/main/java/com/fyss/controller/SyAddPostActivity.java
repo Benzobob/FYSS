@@ -1,12 +1,14 @@
 package com.fyss.controller;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
-
+import static com.fyss.service.Const.PREFS_NAME;
+import static com.fyss.service.Const.PREF_DARK_THEME;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.fyss.R;
@@ -40,6 +42,14 @@ public class SyAddPostActivity extends AppCompatActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        boolean useDarkTheme = preferences.getBoolean(PREF_DARK_THEME, false);
+
+        if(useDarkTheme) {
+            setTheme(R.style.AppTheme_DarkTheme_NoActionBar);
+        }else{
+            setTheme(R.style.AppTheme_LightTheme_NoActionBar);
+        }
         setContentView(R.layout.activity_add_post);
         sm = new SessionManager(getApplicationContext());
         HashMap<String, String> user = sm.getUserDetails();

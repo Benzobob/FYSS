@@ -1,21 +1,55 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
+
+    <style name="AppTheme.LightTheme" parent ="AppTheme">
+        <item name="primary">#01B7A4</item>
+        <item name="pDark">#01B7A4</item>
+        <item name="secondary">#00574B</item>
+        <item name="tertiary">#FFFFFF</item>
+        <item name="backg">#FFFFFF</item>
+        <item name="textColor1">#FFFFFF</item>
+        <item name="textColor2">#424242</item>
+        <item name="dividerColor">#00574B</item>
+        <item name="dividerColorDark">#00574B</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme" parent ="AppTheme">
+        <item name="primary">#424242</item>
+        <item name="pDark">#3D3D3D</item>
+        <item name="secondary">#2B2B2B</item>
+        <item name="tertiary">#5A5A5A</item>
+        <item name="backg">#808080</item>
+        <item name="textColor1">#FFFFFF</item>
+        <item name="textColor2">#424242</item>
+        <item name="dividerColor">#9B9B9B</item>
+        <item name="dividerColorDark">#5A5A5A</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.LightTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="AppTheme.DarkTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.DarkTheme.PopupOverlay" parent="ThemeOverlay.AppCompat" />
+
+    <style name="AppTheme.LightTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.LightTheme.PopupOverlay" parent="ThemeOverlay.AppCompat" />
 
 </resources>

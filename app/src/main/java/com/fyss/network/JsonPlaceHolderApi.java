@@ -60,6 +60,9 @@ public interface JsonPlaceHolderApi {
    @DELETE("fyss.fcmtokens/{id}")
    Call<Void> removeFcmToken(@Path("id") String token);
 
+   @DELETE("fyss.posts/{id}")
+   Call<Void> removePost(@Path("id") String id);
+
    @DELETE("fyss.groupmeetings/{id}")
    Call<Void> removeMeeting(@Path("id") String id);
 
@@ -107,4 +110,10 @@ public interface JsonPlaceHolderApi {
 
    @PUT("fyss.usersfy/{id}")
    Call<Void> editFyUser(@Path("id") int id, @Body FyUser user);
+
+   @PUT("fyss.userssy/{id}")
+   Call<Void> editSyUser(@Path("id") int id, @Body SyUser user);
+
+   @PUT("fyss.posts/{id}")
+   Call<Void> editPost(@Path("id") int id, @Body Posts post);
 }

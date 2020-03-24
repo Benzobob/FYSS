@@ -2,6 +2,7 @@ package com.fyss.controller.ui.dashboard.fy.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,11 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
-
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.fyss.R;
 import com.fyss.controller.LoginActivity;
@@ -44,8 +45,9 @@ import retrofit2.Retrofit;
  * Use the {@link FragDashFy1#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragDashFy1 extends Fragment {
+public class FragDashFy1 extends Fragment{
 
+    private SwipeRefreshLayout swipeRefreshLayout;
     private SessionManager session;
     private FragDashFy1.OnFragmentInteractionListener mListener;
     private String fcmToken;
@@ -91,11 +93,19 @@ public class FragDashFy1 extends Fragment {
             fyid = Integer.parseInt(user.get(SessionManager.KEY_USER_ID));
         }
 
+        swipeRefreshLayout = getActivity().findViewById(R.id.pullToRefresh);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                preparePosts();
+            }
+        });
         setUser();
 
         return frag1;
 
     }
+
 
     private void setUser() {
             Call<FyUser> call = jsonPlaceHolderApi.findFyUserById(fyid);
@@ -186,6 +196,7 @@ public class FragDashFy1 extends Fragment {
             }
         });
     }
+
 
     /**
      * This interface must be implemented by activities that contain this

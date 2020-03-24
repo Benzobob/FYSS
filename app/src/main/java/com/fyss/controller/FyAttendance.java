@@ -19,7 +19,8 @@ import com.fyss.network.RetrofitClientInstance;
 import com.fyss.session.SessionManager;
 import java.util.HashMap;
 import retrofit2.Retrofit;
-
+import static com.fyss.service.Const.PREFS_NAME;
+import static com.fyss.service.Const.PREF_DARK_THEME;
 
 public class FyAttendance extends AppCompatActivity
         implements  NfcAdapter.CreateNdefMessageCallback,
@@ -36,6 +37,14 @@ public class FyAttendance extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        boolean useDarkTheme = preferences.getBoolean(PREF_DARK_THEME, false);
+
+        if(useDarkTheme) {
+            setTheme(R.style.AppTheme_DarkTheme_NoActionBar);
+        }else{
+            setTheme(R.style.AppTheme_LightTheme_NoActionBar);
+        }
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         sm = new SessionManager(getApplicationContext());
         retrofit = RetrofitClientInstance.getRetrofitInstance();

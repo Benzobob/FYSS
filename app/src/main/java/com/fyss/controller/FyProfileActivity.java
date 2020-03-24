@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -17,7 +18,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import static com.fyss.service.Const.PREFS_NAME;
+import static com.fyss.service.Const.PREF_DARK_THEME;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -52,7 +54,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class FyProfileActivity extends AppCompatActivity {
-    private TextView name, email, num, group;
+    private TextView name, email, num, group, bio;
     private String id;
     private FyUser user;
     private ImageButton homeBtn, settingsBtn;
@@ -69,6 +71,14 @@ public class FyProfileActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        boolean useDarkTheme = preferences.getBoolean(PREF_DARK_THEME, false);
+
+        if(useDarkTheme) {
+            setTheme(R.style.AppTheme_DarkTheme_NoActionBar);
+        }else{
+            setTheme(R.style.AppTheme_LightTheme_NoActionBar);
+        }
         setContentView(R.layout.activity_profile);
         id = (String) getIntent().getSerializableExtra("FyId");
         sm = new SessionManager(getApplicationContext());
@@ -82,6 +92,7 @@ public class FyProfileActivity extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
         profPic = findViewById(R.id.profile);
+        bio = findViewById(R.id.bioText);
 
         setUser(id);
     }
@@ -131,7 +142,7 @@ public class FyProfileActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), FyEditProfileActivity.class);
                 intent.putExtra("user", user);
                 startActivity(intent);
-                finish();
+                //finish();
             }
         });
     }
@@ -143,6 +154,7 @@ public class FyProfileActivity extends AppCompatActivity {
         email.setText(user.getEmail());
         num.setText(user.getPhoneNum());
         group.setText("1st Year - Member of group " + user.getGid().getGid());
+        bio.setText(user.getFirstname() + " has not set a bio yet.");
 
         if(user.getProfileImg() != null) {
             bitmap = getBitmapFromMemCache(user.getProfileImg());
