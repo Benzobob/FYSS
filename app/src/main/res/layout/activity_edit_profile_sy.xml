@@ -32,7 +32,7 @@
             android:layout_marginRight="10dp"
             android:background="@drawable/round_corner"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_back"
+            app:srcCompat="@drawable/ic_back"
             tools:ignore="ContentDescription" />
 
         <ImageButton

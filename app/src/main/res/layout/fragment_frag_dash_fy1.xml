@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+
+<com.skhugh.simplepulltorefresh.PullToRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/pullToRefresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:refreshIconColor="@color/colorPurple"
     android:background="?attr/backg"
-    android:orientation="vertical"
-    tools:context=".controller.ui.dashboard.sy.fragment.FragDashSy1">
+    app:refreshIconSize="30dp"
+    app:refreshLayoutBackgroundColor="?attr/tertiary">
 
-    <android.support.androidx.widget.SwipeRefreshLayout
-        android:id="@+id/pullToRefresh"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewPosts"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#007A7878" />
-    </android.support.androidx.widget.SwipeRefreshLayout>
-</LinearLayout>
+
+</com.skhugh.simplepulltorefresh.PullToRefreshLayout>

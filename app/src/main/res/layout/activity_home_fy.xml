@@ -38,7 +38,7 @@
             android:layout_marginRight="10dp"
             android:background="@drawable/round_corner"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_user"
+            app:srcCompat="@drawable/ic_user"
             tools:ignore="ContentDescription" />
 
         <ImageButton
@@ -50,7 +50,7 @@
             android:layout_marginRight="10dp"
             android:background="@drawable/round_corner"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_edit"
+            app:srcCompat="@drawable/ic_edit"
             tools:ignore="ContentDescription" />
 
 

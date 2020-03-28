@@ -5,7 +5,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorPurple</item>
     </style>
 
 
@@ -44,12 +44,6 @@
     </style>
 
 
-    <style name="AppTheme.DarkTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.DarkTheme.PopupOverlay" parent="ThemeOverlay.AppCompat" />
-
     <style name="AppTheme.LightTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.LightTheme.PopupOverlay" parent="ThemeOverlay.AppCompat" />
 
 </resources>

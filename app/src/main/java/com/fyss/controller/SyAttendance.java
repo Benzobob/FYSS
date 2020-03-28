@@ -158,6 +158,7 @@ public class SyAttendance extends AppCompatActivity {
 
     @Override
     public void onNewIntent(Intent intent) {
+        //super.onNewIntent(intent);
         Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
         NdefMessage msg = (NdefMessage) rawMsgs[0];
 
@@ -165,7 +166,7 @@ public class SyAttendance extends AppCompatActivity {
         String msg1 = new String(msg.getRecords()[0].getPayload());
 
         //If its a first year, then update attendance
-        if(!msg1.matches("SY")){
+        if (!msg1.matches("SY")) {
             checkDuplicate(msg1);
         }
     }

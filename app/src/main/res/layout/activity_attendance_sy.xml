@@ -24,7 +24,7 @@
             android:layout_gravity="start"
             android:background="?attr/secondary"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_back"
+            app:srcCompat="@drawable/ic_back"
             tools:ignore="ContentDescription"
             tools:layout_editor_absoluteX="366dp"
             tools:layout_editor_absoluteY="10dp" />

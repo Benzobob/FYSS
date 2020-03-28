@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,6 +30,8 @@ import com.fyss.network.JsonPlaceHolderApi;
 import com.fyss.network.RetrofitClientInstance;
 import com.fyss.service.MyFirebaseMessagingService;
 import com.fyss.session.SessionManager;
+import com.skhugh.simplepulltorefresh.PullToRefreshLayout;
+import com.skhugh.simplepulltorefresh.PullToRefreshListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,7 +52,6 @@ import retrofit2.Retrofit;
  */
 public class FragDashFy1 extends Fragment{
 
-    private SwipeRefreshLayout swipeRefreshLayout;
     private SessionManager session;
     private FragDashFy1.OnFragmentInteractionListener mListener;
     private String fcmToken;
@@ -93,13 +97,16 @@ public class FragDashFy1 extends Fragment{
             fyid = Integer.parseInt(user.get(SessionManager.KEY_USER_ID));
         }
 
-        swipeRefreshLayout = getActivity().findViewById(R.id.pullToRefresh);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        final PullToRefreshLayout pullToRefreshLayout = (PullToRefreshLayout) frag1.findViewById(R.id.pullToRefresh);
+        pullToRefreshLayout.setPullToRefreshListener(new PullToRefreshListener() {
+            // Start refreshing stuff
             @Override
-            public void onRefresh() {
-                preparePosts();
+            public void onStartRefresh(@Nullable View view) {
+                setUser();
+                pullToRefreshLayout.refreshDone();
             }
         });
+
         setUser();
 
         return frag1;
@@ -212,4 +219,5 @@ public class FragDashFy1 extends Fragment{
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 }

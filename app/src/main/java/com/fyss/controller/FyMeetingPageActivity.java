@@ -2,7 +2,9 @@ package com.fyss.controller;
 
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -11,6 +13,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -19,6 +22,7 @@ import static com.fyss.service.Const.PREFS_NAME;
 import static com.fyss.service.Const.PREF_DARK_THEME;
 import com.fyss.R;
 import com.fyss.model.GroupMeeting;
+import com.fyss.service.PushReminder;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -26,6 +30,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,10 +39,9 @@ import java.util.Date;
 public class FyMeetingPageActivity extends FragmentActivity implements OnMapReadyCallback {
 
 
-    private Button attendBtn, pvaBtn, qualBtn;
     private ImageButton backBtn, mapBtn;
     private SharedPreferences sharedPreferences;
-    private Toolbar toolbar;
+    private FloatingActionButton remidnerBtn;
     private TextView meeting_num, topic, desc;
     private TextView weekNo, date, time, building, room;
     private LinearLayout when, where;
@@ -45,10 +49,13 @@ public class FyMeetingPageActivity extends FragmentActivity implements OnMapRead
     private GroupMeeting meeting;
     private SupportMapFragment mapFragment;
     private ScrollView sv;
+    private String dateTime, building1, room1, gmid;
+    private boolean showReminderBtn = true;
 
     @SuppressLint("SetTextI18n")
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         super.onCreate(savedInstanceState);
         SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         boolean useDarkTheme = preferences.getBoolean(PREF_DARK_THEME, false);
@@ -75,13 +82,18 @@ public class FyMeetingPageActivity extends FragmentActivity implements OnMapRead
         meeting_num = findViewById(R.id.meeting_no);
         topic = findViewById(R.id.topic);
         desc = findViewById(R.id.description);
-        toolbar = findViewById(R.id.toolbar);
         backBtn = findViewById(R.id.backBtn);
         mapBtn  = findViewById(R.id.mapBtn);
         sv = findViewById(R.id.scrollView3);
+        remidnerBtn = findViewById(R.id.floatingActionButton3);
 
-        //setSupportActionBar(toolbar);
-        //getSupportActionBar().setDisplayShowTitleEnabled(false);
+        dateTime = meeting.getDateStr();
+        building1 = meeting.getBuilding();
+        gmid = meeting.getGmid().toString();
+        room1 = meeting.getRoom();
+        topic.setText(meeting.getTopic());
+
+        checkIfReminderHasBeenSet();
 
         //When and where
         setMeetingDetails();
@@ -108,6 +120,15 @@ public class FyMeetingPageActivity extends FragmentActivity implements OnMapRead
                 toggleMap();
             }
         });
+
+        remidnerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setUpCalendar();
+                remidnerBtn.setVisibility(View.GONE);
+            }
+        });
+
 
     }
 
@@ -181,5 +202,43 @@ public class FyMeetingPageActivity extends FragmentActivity implements OnMapRead
             mapFragment.getView().setVisibility(View.GONE);
             sv.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void checkIfReminderHasBeenSet() {
+        SimpleDateFormat output = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        String[] projection = new String[] { CalendarContract.Events.CALENDAR_ID, CalendarContract.Events.TITLE, CalendarContract.Events.DESCRIPTION, CalendarContract.Events.DTSTART, CalendarContract.Events.DTEND, CalendarContract.Events.ALL_DAY, CalendarContract.Events.EVENT_LOCATION };
+        Date d = null;
+        try {
+            d = output.parse(dateTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        long HOUR = 3600*1000;
+        Date endTime = new Date(d.getTime() + HOUR);
+
+        String selection = "(( " + CalendarContract.Events.DTSTART + " >= " + d.getTime() + " ) AND ( " + CalendarContract.Events.DTSTART + " <= " + endTime.getTime() + " ))";
+
+        Cursor cursor = this.getBaseContext().getContentResolver().query( CalendarContract.Events.CONTENT_URI, projection, selection, null, null );
+
+        if (cursor.moveToFirst()) {
+            do {
+                showReminderBtn = false;
+                remidnerBtn.setVisibility(View.GONE);
+            } while ( cursor.moveToNext());
+        }
+    }
+
+    private void setUpCalendar() {
+        SimpleDateFormat output = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        Date d = null;
+        try {
+            d = output.parse(dateTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        long HOUR = 3600*1000;
+        Date endTime = new Date(d.getTime() + HOUR);
+        String loc =  building1 + " Building. " + room1;
+        PushReminder reminder = new PushReminder( loc, d, endTime,  FyMeetingPageActivity.this);
     }
 }

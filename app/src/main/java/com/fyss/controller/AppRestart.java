@@ -1,6 +1,5 @@
 package com.fyss.controller;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -12,7 +11,7 @@ public class AppRestart extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         System.exit(0);
     }
-    public static void doRestart(Activity anyActivity) {
+    public static void doRestart(AppCompatActivity anyActivity) {
         anyActivity.startActivity(new Intent(anyActivity.getApplicationContext(), AppRestart.class));
     }
 }

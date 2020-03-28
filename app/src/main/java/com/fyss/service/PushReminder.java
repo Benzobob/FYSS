@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 
 import com.fyss.R;
 import com.fyss.controller.SyMeetingPageActivity;
@@ -21,7 +22,9 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class PushReminder {
-    AppCompatActivity activity;
+    AppCompatActivity activity = null;
+    FragmentActivity activity1 = null;
+    private ContentResolver cr;
 
     public PushReminder() {
     }
@@ -29,13 +32,20 @@ public class PushReminder {
     public PushReminder( String location, Date Start_date, Date end_date, AppCompatActivity ac) {
         // TODO Auto-generated constructor stub
         activity=ac;
+        cr = activity.getContentResolver();
+        addReminder( location, Start_date,end_date);
+    }
+
+    public PushReminder(String location, Date Start_date, Date end_date, FragmentActivity ac) {
+        // TODO Auto-generated constructor stub
+        activity1=ac;
+        cr = activity1.getContentResolver();
         addReminder( location, Start_date,end_date);
     }
 
 
 
     private void addReminder(String location, Date start, Date end) {
-        ContentResolver cr=activity.getContentResolver();
 
         ContentValues calEvent = new ContentValues();
         calEvent.put(CalendarContract.Events.CALENDAR_ID, 1);
@@ -56,9 +66,16 @@ public class PushReminder {
 
         Uri uri2 = cr.insert(CalendarContract.Reminders.CONTENT_URI, reminders);
 
-        Snackbar mySnackbar = Snackbar.make(activity.findViewById(android.R.id.content),"Reminder Set.", Snackbar.LENGTH_LONG);
-        mySnackbar.setAction("See Calendar", new goToCalendarListener(start));
-        mySnackbar.show();
+        if(activity != null) {
+            Snackbar mySnackbar = Snackbar.make(activity.findViewById(android.R.id.content), "Reminder Set.", Snackbar.LENGTH_LONG);
+            mySnackbar.setAction("See Calendar", new goToCalendarListener(start));
+            mySnackbar.show();
+        }
+        else{
+            Snackbar mySnackbar = Snackbar.make(activity1.findViewById(android.R.id.content), "Reminder Set.", Snackbar.LENGTH_LONG);
+            mySnackbar.setAction("See Calendar", new goToCalendarListener(start));
+            mySnackbar.show();
+        }
     }
 
     public class goToCalendarListener implements View.OnClickListener {
